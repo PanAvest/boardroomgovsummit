@@ -1,5 +1,15 @@
 [
  {
+  "name": "Global Media Alliance",
+  "group": "media",
+  "file": "global-media-alliance.png"
+ },
+ {
+  "name": "Business & Financial Times (B&FT)",
+  "group": "media",
+  "file": "business-and-financial-times.png"
+ },
+ {
   "name": "TV3",
   "group": "media",
   "file": "tv3.png"
