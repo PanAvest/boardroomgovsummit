@@ -1,0 +1,61 @@
+---
+import { nextEdition } from '../data/site';
+interface Props {
+  showRecapLink?: boolean;
+}
+const { showRecapLink = true } = Astro.props;
+---
+
+<section class="thanks" aria-labelledby="thanks-title">
+  <div class="container thanks__inner">
+    <h2 id="thanks-title">
+      Thank you for making BGS 2026 a success. We look forward to welcoming returning and new delegates in {
+        nextEdition.year
+      }.
+    </h2>
+    <p>
+      {nextEdition.status}.
+      {
+        showRecapLink && (
+          <>
+            Read about <a href="/summit-2026/">the 2026 summit here</a> and{' '}
+          </>
+        )
+      }
+      {showRecapLink ? 'register' : 'Register'} your interest for BGS {nextEdition.year}
+      <a href={nextEdition.href}>here</a>.
+    </p>
+  </div>
+</section>
+
+<style>
+  .thanks {
+    background: var(--red);
+    color: var(--white);
+    padding-block: clamp(2.5rem, 2rem + 2vw, 3.75rem);
+    text-align: center;
+  }
+  .thanks__inner {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: center;
+  }
+  .thanks h2 {
+    max-width: 30ch;
+    font-size: clamp(1.45rem, 1.1rem + 1.6vw, 2.35rem);
+    line-height: 1.12;
+    letter-spacing: -0.03em;
+  }
+  .thanks p {
+    font-size: 0.98rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  .thanks a {
+    color: var(--white);
+    font-weight: 600;
+    text-decoration-color: rgba(255, 255, 255, 0.6);
+  }
+  .thanks a:hover {
+    text-decoration-color: var(--gold);
+  }
+</style>

@@ -1,0 +1,160 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import AnnouncementBar from '../components/AnnouncementBar.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  /** 'dark' = header sits on a dark hero; 'light' = header on a light page */
+  theme?: 'dark' | 'light';
+  type?: 'website' | 'article';
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = site.description,
+  image = '/og-image.jpg',
+  theme = 'dark',
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+const fullTitle = title ? `${title} | ${site.name}` : `${site.name} | ${site.tagline}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image, Astro.site);
+const orgSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: site.name,
+  alternateName: 'BGS',
+  url: site.url,
+  logo: new URL('/icon-512.png', Astro.site).href,
+  email: 'info@boardroomgovsummit.com',
+  sameAs: [
+    'https://www.linkedin.com/company/boardroom-governance-summit/',
+    'https://twitter.com/boardroomsummit',
+    'https://www.instagram.com/boardroomgsummit/',
+  ],
+};
+---
+
+<!doctype html>
+<html lang="en-GB">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <meta name="theme-color" content="#020b26" />
+
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:locale" content="en_GB" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@boardroomsummit" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    <slot name="head" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body data-theme={theme}>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <AnnouncementBar />
+    <Header theme={theme} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <button type="button" class="to-top" aria-label="Back to top">↑</button>
+
+    <script>
+      // Lazy images fade in over their skeleton (also for images added later)
+      const loaded = (img: EventTarget | null) => img instanceof HTMLImageElement && img.classList.add('is-loaded');
+      document.addEventListener('load', (e) => loaded(e.target), true);
+      document.addEventListener('error', (e) => loaded(e.target), true);
+      document.querySelectorAll<HTMLImageElement>('img').forEach((img) => img.complete && loaded(img));
+
+      // Reveal on scroll: explicit [data-reveal] plus common blocks, staggered within their row
+      const auto =
+        '.section-head, .card, .speaker, .news-card, .edition, .tier, .album, .logos li, .logo-grid li, .book, .pillar, .why, .faq details, .agenda__row, .media, .channels li, .stats__grid li, .unique li, .takeaways li, .rule-list > li, .check-list li, .expect li, .pages li, .endorse li';
+      document.querySelectorAll<HTMLElement>(auto).forEach((el) => {
+        if (el.closest('.page-hero, .hero, .s-hero, dialog, .marquee') || el.hasAttribute('data-reveal')) return;
+        el.setAttribute('data-reveal', el.matches('.media, .album, .book') ? 'zoom' : '');
+      });
+      const io = new IntersectionObserver(
+        (entries) => {
+          const batch = entries.filter((e) => e.isIntersecting);
+          batch.forEach((e, i) => {
+            const el = e.target as HTMLElement;
+            el.style.setProperty('--i', String(Math.min(i, 8)));
+            el.classList.add('is-in');
+            el.addEventListener('transitionend', () => el.style.removeProperty('--i'), { once: true });
+            io.unobserve(el);
+          });
+        },
+        { rootMargin: '0px 0px -6% 0px', threshold: 0.06 },
+      );
+      document.querySelectorAll('[data-reveal]').forEach((el) => io.observe(el));
+
+      // Scroll progress + back to top
+      const bar = document.querySelector<HTMLElement>('.scroll-progress')!;
+      const top = document.querySelector<HTMLElement>('.to-top')!;
+      let tick = false;
+      const onScroll = () => {
+        if (tick) return;
+        tick = true;
+        requestAnimationFrame(() => {
+          const max = document.documentElement.scrollHeight - innerHeight;
+          bar.style.transform = `scaleX(${max > 0 ? scrollY / max : 0})`;
+          top.classList.toggle('is-on', scrollY > 900);
+          tick = false;
+        });
+      };
+      addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+      top.addEventListener('click', () => scrollTo({ top: 0, behavior: 'smooth' }));
+
+      // Count up the numbers in the stats band
+      document.querySelectorAll<HTMLElement>('.stats__value').forEach((el) => {
+        const m = el.textContent!.match(/^([\d,]+)(.*)$/);
+        if (!m) return;
+        const end = Number(m[1].replace(/,/g, ''));
+        if (end < 10) return;
+        const o = new IntersectionObserver(([e]) => {
+          if (!e.isIntersecting) return;
+          o.disconnect();
+          const t0 = performance.now();
+          const step = (t: number) => {
+            const k = Math.min(1, (t - t0) / 1400);
+            el.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))).toLocaleString('en-GB') + m[2];
+            if (k < 1) requestAnimationFrame(step);
+          };
+          requestAnimationFrame(step);
+        });
+        o.observe(el);
+      });
+    </script>
+    <script>
+      import { initForms } from '../scripts/forms';
+      initForms();
+    </script>
+  </body>
+</html>

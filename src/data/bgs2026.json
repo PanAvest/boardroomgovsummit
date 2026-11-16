@@ -1,0 +1,297 @@
+{
+ "event": {
+  "theme": "Board Committees: From Oversight to Impact",
+  "sub": "The conversation every board must have.",
+  "date": "Thursday, 12 November, 2026",
+  "time": "8:30am",
+  "venue": "Labadi Beach Hotel",
+  "city": "Accra, Ghana",
+  "tagline": "Shaping accountability in the boardrooms",
+  "web": "www.boardroomgovsummit.com",
+  "register": "https://boardroomgovsummit.com/registration/",
+  "email": "info@boardroomgovsummit.com",
+  "phone": "+233 (0)53 145 1470",
+  "whatsapp": "+233 (0)53 886 5196",
+  "price": "GH₵2,500"
+ },
+ "chair": "garbrah",
+ "guests": [
+  "debrah",
+  "nhleko",
+  "asareyeboah",
+  "hesse",
+  "ghartey",
+  "andani",
+  "oyebanji",
+  "pritchard"
+ ],
+ "afternoonChair": "asareyeboah",
+ "people": {
+  "boateng": {
+   "name": "Prof. Douglas Boateng",
+   "role": "Convener, Boardroom Governance Summit",
+   "bio": "Africa's first appointed Professor Extraordinaire for Supply and Value Chain Management (SBL, UNISA), an International Professional Chartered Director and an elected member of the UK Institute of Directors for more than two decades. He is regarded as one of the world's vertical-specific strategic thinkers on procurement, governance, logistics and industrial engineering. His counsel spans pharmaceuticals, mining, financial services, state-owned enterprises, aviation and agriculture. He holds a Doctor of Engineering from the University of Warwick and received the Chartered Institute of Procurement and Supply's Platinum Lifetime Global Achievers Award in 2016."
+  },
+  "debrah": {
+   "name": "Hon. Dr. Julius Debrah",
+   "role": "Chief of Staff to the President of Ghana",
+   "bio": "Chief of Staff to the President of the Republic of Ghana, an office he first held from 2015 to 2017 and resumed in January 2025. An alumnus of Achimota School and the University of Ghana, he has served as Minister for Local Government and Rural Development, Eastern Regional Minister and Greater Accra Regional Minister, where he championed the National Sanitation Day campaign. Respected across the political divide, he is known for a grassroots touch and quiet, effective administration at the heart of government."
+  },
+  "andani": {
+   "name": "Chief Alhassan Andani",
+   "role": "Board Chairman, Ecobank Ghana PLC and Cocoa Processing Company",
+   "bio": "Board Chairman of Ecobank Ghana PLC and one of the most respected figures in Ghanaian banking. A former Managing Director of Stanbic Bank Ghana and President of the Ghana Association of Banks, he brings more than 36 years of experience across corporate and investment banking and governance. He chairs the Council for Scientific and Industrial Research and SOS Children's Villages Ghana, serves on the board of Gold Fields Limited, and is the Paramount Chief of Pishigu in the Dagbon Traditional Area."
+  },
+  "garbrah": {
+   "name": "H.E. Dr. Ekwow Spio-Garbrah",
+   "role": "Senior Advisor to the President and Presidential Special Envoy for Reparations",
+   "bio": "Presidential Special Envoy for Reparations, appointed by President John Dramani Mahama in October 2025 to advance Ghana's case for reparations. A graduate of the University of Ghana and Ohio University, he served as Ghana's Ambassador to the United States and Mexico from 1994 to 1997, then as Minister of Communications and Minister of Education, where he established the Ghana Education Trust Fund (GETFund). From 2003 to 2011 he was the first African Chief Executive of the Commonwealth Telecommunications Organisation, and he later served as Minister for Trade and Industry from 2014 to 2017."
+  },
+  "pritchard": {
+   "name": "Mr. Mark Pritchard",
+   "role": "Chairman, ASCON, Francophone Africa Trade",
+   "bio": "Managing Director of MAP Consultants Côte d'Ivoire, and Francophone Africa Champion and Pan-African Trade Lead for the African Supply Chain Confederation (ASCON). Based in Abidjan, he brings some 35 years of business-building and leadership experience across Africa. His work centres on trade facilitation and corridor development under the African Continental Free Trade Area, with a particular focus on the Abidjan to Lagos corridor and on harmonising road-transport rules across ECOWAS and UEMOA states."
+  },
+  "oyebanji": {
+   "name": "Otunba Adetunji Oyebanji, F.CIoD",
+   "role": "President & Chairman of Council, Chartered Institute of Directors Nigeria",
+   "bio": "President and Chairman of the Governing Council of the Chartered Institute of Directors Nigeria and Managing Director of 11 Plc (formerly Mobil Oil Nigeria). With four decades in oil and gas he has helped shape Nigeria's downstream petroleum sector, chairing the Major Energies Marketers Association of Nigeria from 2019 to 2021. He holds a BSc in Economics from the University of Lagos and an MBA from Bayes Business School, and has been named among Nigeria's top 25 chief executives by BusinessDay."
+  },
+  "addo": {
+   "name": "Mr. Felix E. Addo",
+   "role": "Board Chairman, Guinness Ghana Breweries PLC",
+   "bio": "Non-executive Chairman of Guinness Ghana Breweries since 2018 and a former Chairman of the Ghana National Petroleum Corporation. He led PwC Ghana as Country Senior Partner from 2009 to 2015 and sat on the PwC Africa Governance Board, after more than 30 years advising on corporate finance and recovery, forensic audit, restructuring and infrastructure. He serves on the boards of MTN Ghana, KEK Insurance Brokers and PaySwitch, and is President of the Ghana Association of Restructuring and Insolvency Advisors."
+  },
+  "weiye": {
+   "name": "Mr. Michael Wei Ye",
+   "role": "Managing Director, Sunda International Ghana Ltd.",
+   "bio": "Leads the Ghana operations of Sunda International, one of the largest manufacturers of home and personal-care products on the continent. Under his stewardship Sunda has deepened local manufacturing in Accra, including a US$48 million partnership with the International Finance Corporation to expand production of washing powder, diapers and sanitary products, while exporting close to half of its output and strengthening private-sector links between China and Africa."
+  },
+  "kalmoni": {
+   "name": "Mr. Salah Kweku Kalmoni",
+   "role": "Chief Executive Officer, Japan Motors Trading Company",
+   "bio": "Chief Executive Officer of Japan Motors Trading Company, the Kalmoni Group business whose history in Ghana began in 1912, and Executive Director of Silver Star Tower and Lakeside Estate. He oversees Advance Constructions, Lakeside Estates and the ten-storey Silver Star Tower, a landmark of Accra's Airport City, bringing a family-business perspective on long-term stewardship and the governance of enterprises built to last generations."
+  },
+  "ofori": {
+   "name": "Dr. Patrick Kwaku Ofori",
+   "role": "CEO, Ghana Chamber of Bulk Oil Distributors (CBOD)",
+   "bio": "Chief Executive of the Ghana Chamber of Bulk Oil Distributors since 2022, following senior roles at the Ghana National Petroleum Corporation, where he managed crude oil and products marketing and institutional reporting. A Commonwealth Scholar, he holds a PhD from the University of Stirling and an MSc in Accounting and Finance from the University of Ghana, and was the founding Head of the Department of Sports Science at the University of Cape Coast."
+  },
+  "asareyeboah": {
+   "name": "Mrs. Mary Asare-Yeboah, FIoD",
+   "role": "President and Chair of the Governing Council, Institute of Directors-Ghana (IoD-Gh)",
+   "bio": "President and Chair of the Governing Council of the Institute of Directors-Ghana (IoD-Gh), elected in June 2025 to lead the Institute’s 11th Governing Council after serving as its Vice-President from 2023. A Fellow of the Institute and a licensed insolvency practitioner, she speaks widely on the legal duties of directors and on ethical leadership, and champions continuous learning for boards through the Institute’s regular seminars and webinars on emerging governance issues such as cybersecurity."
+  },
+  "hesse": {
+   "name": "Ing. Ludwig Annang Hesse",
+   "role": "President, Ghana Institution of Engineering (GhIE)",
+   "bio": "The 53rd President of the Ghana Institution of Engineering, invested in 2025 under the theme “Engineering Our Future: Do it Well, Do it Right.” A Fellow of the Institution, he has called for engineering to take a central role in Ghana’s food security and for a thorough reset of the road sector, and has led the Institution’s new leadership in engagements with the Electricity Company of Ghana, the Volta River Authority and the Ministry of Works and Housing."
+  },
+  "ghartey": {
+   "name": "Mrs. Efua Ghartey",
+   "role": "President, Ghana Bar Association",
+   "bio": "President of the Ghana Bar Association and the first woman to lead it, elected in Kumasi in September 2024. Called to the Bar in 1991, she began her career as a Legal Aid Officer and in 1994 co-founded Ghartey & Ghartey, where she is Head of Chambers. She led the Association’s Greater Accra Branch for six years, served ten years on its National Executive Council, and has held executive positions in FIDA Ghana."
+  },
+  "fletcher": {
+   "name": "Mr. Samuel Kwesi Fletcher",
+   "role": "Deputy Chief Executive (Services), Volta River Authority (VRA)",
+   "bio": "Deputy Chief Executive (Services) of the Volta River Authority. He previously headed the Authority’s Corporate Communications and CSR and was its spokesperson through the 2012–2015 power crisis, leading demand-side management and energy-conservation programmes. He brings more than 28 years’ experience across energy, telecommunications and ICT, and international diplomacy, including the Commonwealth Telecommunications Organisation in London and IBM in the Netherlands, and is Vice President on the Board of the Ghana Network of the UN Global Compact."
+  },
+  "nhleko": {
+   "name": "Mr. Phuthuma Nhleko",
+   "role": "Chairman, Johannesburg Stock Exchange (JSE)",
+   "bio": "Chairman of the JSE, Africa’s largest stock exchange, since May 2022, having joined its board in July 2021. He led MTN Group as Group President and Chief Executive Officer from 2002 to 2011, building it into one of Africa’s leading telecommunications companies, and later returned to chair its board. He is the founder and Chairman of the Pembani Group, an investment holding company, and in 2012 established the Pembani Remgro Infrastructure Fund."
+  },
+  "sanusi": {
+   "name": "Ms. Ruka Sanusi",
+   "role": "Co-Founder, Decarbonomics Climate Advisors",
+   "bio": "Co-Founder of Decarbonomics Climate Advisors and the Decarbonomics Venture Accelerator, and Founder of Alldens Lane, a boutique consulting and coaching firm for women-led enterprises across Africa. A management consultant and executive coach with three decades of experience across Europe and 16 sub-Saharan African countries, she was Executive Director of the Ghana Climate Innovation Centre for more than eight years until April 2025, raising over US$20 million for green businesses. Earlier, at PwC Ghana and Nigeria, she built the Strategy & Operations Advisory unit and launched the firm’s Sustainability and Climate Change practice."
+  },
+  "acheampong": {
+   "name": "Stella Acheampong",
+   "role": "Director, Internal Audit, Department of Energy and Green Transition",
+   "bio": "Director of Internal Audit for Ghana’s energy and green transition portfolio, where she leads the internal audit function that gives leadership independent assurance on risk management, internal control and governance in one of the country’s most financially significant sectors. She brings the public-sector auditor’s view to the panel: how audit committees and internal auditors can surface problems in the numbers before they become crises."
+  },
+  "braimah": {
+   "name": "Dr. Alfred Mahamadu Braimah",
+   "role": "Board Chairman, Benso Oil Palm Plantation PLC",
+   "bio": "Board Chairman of Benso Oil Palm Plantation PLC, consistently among the best-performing companies on the Ghana Stock Exchange. A chartered accountant with 38 years in national and international management, he has worked across rice farming and milling, fast-moving consumer goods and oil palm, including senior roles with Unilever in Ghana, India, the United Kingdom, South Africa and Nigeria, and with ECOWAS. He holds a BSc in Administration from the University of Ghana, an MBA with distinction from Durham University and a PhD in management."
+  },
+  "dake": {
+   "name": "Ms. Sena Dake",
+   "role": "Independent Non-Executive Director, Republic Bank (Ghana) PLC",
+   "bio": "Independent Non-Executive Director of Republic Bank (Ghana) PLC since August 2025 and Immediate Past President of the Institute of Chartered Accountants, Ghana. A finance, governance and sustainability professional with more than 20 years of leadership in the public and private sectors, she is Director of Finance and Administration at the Gaming Commission of Ghana. A chartered accountant, lawyer and ICAEW-certified ESG professional, she is a Fellow of the Institute of Directors, Ghana and has chaired the Audit and Risk Committee of the Pan-African Federation of Accountants."
+  }
+ },
+ "panels": [
+  {
+   "n": 1,
+   "title": "Committees: The Boardroom’s Best-Kept Open Secret",
+   "kicker": "Every chairperson knows it",
+   "perspective": "The Chairperson’s perspective on the power of board committees",
+   "intro": "Boards are judged by their decisions, but decisions are shaped long before the full board convenes. Chairpersons of Ghana’s and Nigeria’s most consequential boards discuss how they design, delegate to, and hold to account the committees that quietly run the boardroom.",
+   "moderator": "pritchard",
+   "panelists": [
+    "andani",
+    "addo",
+    "oyebanji"
+   ],
+   "questions": [
+    "If the boardroom is the stage, are committees the writers’ room? Where does the real decision-making actually happen?",
+    "What’s a committee recommendation you initially disagreed with, and what changed your mind?",
+    "How do you tell the difference between a committee that’s genuinely adding rigour and one that’s just adding paperwork?",
+    "Chairpersons often say “trust but verify.” How do you verify a committee’s work without undermining its independence?",
+    "If you could redesign your committee structure from scratch tomorrow, what would you change first, and why haven’t you already?"
+   ],
+   "colors": [
+    "#804a95",
+    "#c04a7a"
+   ]
+  },
+  {
+   "n": 2,
+   "title": "The Committee That Made “Doing Good” a Board Agenda Item",
+   "kicker": "ESG",
+   "perspective": "The ESG Committee’s perspective on responsible corporate citizenship",
+   "intro": "Five years ago “sustainability” was a report. Today it is a standing committee with a budget and a vote. A climate-enterprise adviser and leaders from oil and power, manufacturing and the motor and property business debate whether ESG has become genuine strategy, and what proof of impact should look like.",
+   "moderator": "sanusi",
+   "panelists": [
+    "ofori",
+    "weiye",
+    "kalmoni",
+    "fletcher"
+   ],
+   "questions": [
+    "Is ESG a genuine strategic lever now, or still mostly a reporting exercise dressed up as strategy?",
+    "What’s the most uncomfortable ESG trade-off your board has had to face: profit versus principle?",
+    "How do you stop ESG from becoming a box-ticking committee that meets quarterly and changes nothing?",
+    "Stakeholders increasingly demand proof, not promises. What does “proof” actually look like on your board’s ESG scorecard?",
+    "Ten years from now, will we still be calling it “ESG”, or will it just be called how a well-run company operates?"
+   ],
+   "colors": [
+    "#1e7a3c",
+    "#5fb15a"
+   ]
+  },
+  {
+   "n": 3,
+   "title": "Finance and Audit Committees: Where the Numbers Confess Before the People Do",
+   "kicker": "Finance & Audit",
+   "perspective": "The Finance and Audit Committee’s perspective on financial stewardship and risk",
+   "intro": "The audit committee is the board’s early-warning system. A board chairman and chartered accountant, a public-sector head of internal audit and a past president of the accountancy profession examine how numbers reveal trouble before people admit it, and how to build a culture in which bad news arrives early.",
+   "moderator": "braimah",
+   "panelists": [
+    "acheampong",
+    "dake"
+   ],
+   "questions": [
+    "What’s a red flag in a set of numbers that most directors would miss, but an audit committee never should?",
+    "How do you build a culture where management brings you bad news early, instead of a polished version late?",
+    "Internal controls are only as strong as the people who respect them. How do you audit for integrity, not just accuracy?",
+    "What keeps you up at night more: a risk you can see coming, or one you suspect you can’t?",
+    "If the balance sheet could talk, what’s the one confession it’s always trying to avoid making?"
+   ],
+   "colors": [
+    "#b8860b",
+    "#e1a43b"
+   ]
+  }
+ ],
+ "programme": [
+  {
+   "time": "9:00",
+   "title": "Welcome & Opening Remarks",
+   "detail": "Prof. Douglas Boateng, Convener"
+  },
+  {
+   "time": "9:10",
+   "title": "Special Message",
+   "detail": "Mr. Phuthuma Nhleko, Chairman, Johannesburg Stock Exchange"
+  },
+  {
+   "time": "9:15",
+   "title": "Video Message",
+   "detail": "Institute of Directors-Ghana"
+  },
+  {
+   "time": "9:20",
+   "title": "Keynote Address",
+   "detail": "Speaker to be announced"
+  },
+  {
+   "time": "9:40",
+   "title": "The Chairman’s Rallying Call",
+   "detail": "“The Africa We Desire Starts in the Boardroom” · H.E. Dr. Ekwow Spio-Garbrah"
+  },
+  {
+   "time": "10:10",
+   "title": "Book Unveil",
+   "detail": "H.E. Dr. Ekwow Spio-Garbrah, Chairman of the Summit, and the President, Ghana Bar Association"
+  },
+  {
+   "time": "10:20",
+   "title": "Panel 1 · Chairpersons’ Panel",
+   "detail": "Moderated by Mr. Mark Pritchard"
+  },
+  {
+   "time": "11:20",
+   "title": "Solidarity Message",
+   "detail": "Ghana Institution of Engineering"
+  },
+  {
+   "time": "11:25",
+   "title": "Keynote Address",
+   "detail": "Speaker to be announced"
+  },
+  {
+   "time": "11:45",
+   "title": "The Impact Charge",
+   "detail": "Chartered Institute of Directors Nigeria"
+  },
+  {
+   "time": "11:55",
+   "title": "Panel 2 · ESG Committee Panel",
+   "detail": "Moderated by Ms. Ruka Sanusi"
+  },
+  {
+   "time": "12:55",
+   "title": "Lunch & Networking",
+   "detail": ""
+  },
+  {
+   "time": "14:15",
+   "title": "Afternoon Session Opening Remarks",
+   "detail": "Mrs. Mary Asare-Yeboah, FIoD, President, IoD-Ghana, Chair of the Afternoon Session"
+  },
+  {
+   "time": "14:20",
+   "title": "Panel 3 · Finance & Audit Committee Panel",
+   "detail": "Moderated by Dr. Alfred Mahamadu Braimah (FICAG)"
+  },
+  {
+   "time": "15:20",
+   "title": "Video Message",
+   "detail": "Ghana Bar Association"
+  },
+  {
+   "time": "15:25",
+   "title": "Youth Against Corruption (YAC) Presentation",
+   "detail": "Samuel Appiah Darko Esq., Director in Charge, YAC"
+  },
+  {
+   "time": "16:05",
+   "title": "Video Message",
+   "detail": "Ghana Institute of Procurement and Supply"
+  },
+  {
+   "time": "16:10",
+   "title": "Open Forum",
+   "detail": "Delegates’ Questions and Reflections"
+  },
+  {
+   "time": "17:15",
+   "title": "Closing Remarks",
+   "detail": "Prof. Douglas Boateng, Convener"
+  }
+ ]
+}

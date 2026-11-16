@@ -1,0 +1,181 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import FaqList from '../components/FaqList.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { faqGroups, contact, nextEdition } from '../data/site';
+
+const slug = (s: string) => s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: faqGroups.flatMap((g) =>
+    g.items.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  ),
+};
+---
+
+<BaseLayout
+  title="Frequently Asked Questions"
+  description="Straight answers about the Boardroom Governance Summit: what it is, who attends, why attend in person, and what you walk away with."
+>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
+
+  <PageHero
+    compact
+    eyebrow="Frequently asked questions"
+    title="Before you decide, ask us directly."
+    lead="Plain answers to the questions boardroom leaders actually ask about the summit."
+    crumbs={[{ label: 'About', href: '/about/' }, { label: 'FAQs' }]}
+  >
+    <ul class="keyfacts">
+      <li><strong>1,000+</strong><span>Board chairpersons, directors and C-suite leaders</span></li>
+      <li><strong>Majority</strong><span>Ghanaian executives, with a growing continental delegation</span></li>
+      <li><strong>CPD</strong><span>Accredited certificate of attendance</span></li>
+    </ul>
+  </PageHero>
+
+  <section class="section">
+    <div class="container faq-layout">
+      <nav class="faq-nav" aria-label="FAQ topics">
+        <p class="mono">Topics</p>
+        <ul>
+          {
+            faqGroups.map((g) => (
+              <li>
+                <a href={`#${slug(g.title)}`}>{g.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="faq-nav__help">
+          <p>Still have a question?</p>
+          <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          <a href={contact.whatsappHref} target="_blank" rel="noopener">WhatsApp {contact.whatsapp}</a>
+        </div>
+      </nav>
+      <div class="faq-groups">
+        {
+          faqGroups.map((g, i) => (
+            <section id={slug(g.title)} class="faq-group">
+              <h2>{g.title}</h2>
+              <FaqList items={g.items} openFirst={i === 0} />
+            </section>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title={`Convinced? Be first in line for ${nextEdition.year}.`}
+    secondary={{ label: 'Contact the team', href: '/contact/' }}
+  />
+</BaseLayout>
+
+<style>
+  .keyfacts {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  @media (min-width: 720px) {
+    .keyfacts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0;
+      border-top: 1px solid var(--line-dark);
+    }
+    .keyfacts li {
+      padding: 1.25rem 1.5rem 0 0;
+    }
+    .keyfacts li + li {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--line-dark);
+    }
+  }
+  .keyfacts li {
+    display: grid;
+    gap: 0.35rem;
+  }
+  .keyfacts strong {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    letter-spacing: -0.04em;
+    color: var(--gold);
+  }
+  .keyfacts span {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .faq-layout {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 1000px) {
+    .faq-layout {
+      grid-template-columns: 260px 1fr;
+      gap: 5rem;
+    }
+    .faq-nav {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+      align-self: start;
+    }
+  }
+  .faq-nav .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .faq-nav ul {
+    list-style: none;
+    display: grid;
+    gap: 0.25rem;
+    border-left: 2px solid var(--line);
+  }
+  .faq-nav ul a {
+    display: block;
+    padding: 0.45rem 0 0.45rem 1rem;
+    margin-left: -2px;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    font-weight: 500;
+    color: var(--ink-2);
+  }
+  .faq-nav ul a:hover {
+    border-left-color: var(--red);
+    color: var(--ink);
+  }
+  .faq-nav__help {
+    display: grid;
+    gap: 0.4rem;
+    margin-top: 2.5rem;
+    padding: 1.25rem;
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    font-size: 0.9rem;
+  }
+  .faq-nav__help p {
+    font-weight: 600;
+  }
+  .faq-nav__help a {
+    color: var(--navy-800);
+    overflow-wrap: anywhere;
+  }
+  .faq-groups {
+    display: grid;
+    gap: 4rem;
+  }
+  .faq-group {
+    scroll-margin-top: calc(var(--header-h) + 2rem);
+  }
+  .faq-group h2 {
+    font-size: var(--fs-h3);
+    margin-bottom: 1.25rem;
+  }
+</style>

@@ -1,0 +1,350 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from './PageHero.astro';
+import Icon from './Icon.astro';
+import CtaBand from './CtaBand.astro';
+import { cmsConfigured } from '../lib/cms';
+
+export type GalleryItem = { thumb: string; full: string; w: number; h: number; alt: string };
+
+interface Props {
+  year: string;
+  title: string;
+  lead: string;
+  items: GalleryItem[];
+  brochure?: { href: string; label: string };
+  /** How many photos to show before "Show more". */
+  batch?: number;
+}
+const { year, title, lead, items, brochure, batch = 48 } = Astro.props;
+const editions = [
+  { year: '2026', href: '/2026-gallery/' },
+  { year: '2025', href: '/2025-gallery/' },
+  { year: '2024', href: '/gallery/' },
+];
+const supabase = cmsConfigured
+  ? { url: import.meta.env.PUBLIC_SUPABASE_URL, key: import.meta.env.PUBLIC_SUPABASE_ANON_KEY }
+  : null;
+---
+
+<BaseLayout title={`BGS ${year} Gallery`} description={lead}>
+  <PageHero compact eyebrow={`${year} in focus`} title={title} lead={lead} crumbs={[{ label: 'Gallery', href: '/main-gallery/' }, { label: year }]}>
+    <div class="btn-row">
+      {
+        brochure && (
+          <a class="btn" href={brochure.href} download>
+            <Icon name="download" size={18} /> {brochure.label}
+          </a>
+        )
+      }
+      <span class="g-count mono" data-count>{items.length} photos</span>
+    </div>
+  </PageHero>
+
+  <div class="tabs-wrap">
+    <div class="container">
+      <nav class="tabs" aria-label="Gallery editions">
+        <a href="/main-gallery/">All editions</a>
+        {
+          editions.map((e) => (
+            <a href={e.href} aria-current={e.year === year ? 'page' : undefined}>
+              BGS {e.year}
+            </a>
+          ))
+        }
+      </nav>
+    </div>
+  </div>
+
+  <section class="section section--tight">
+    <div class="container">
+      <ul class="masonry" data-gallery data-batch={batch} data-album={year}>
+        {
+          items.map((im, i) => (
+            <li hidden={i >= batch ? true : undefined}>
+              <a href={im.full} data-lightbox aria-label={`Open photo ${i + 1}`}>
+                <img src={im.thumb} width={im.w} height={im.h} alt={im.alt} loading="lazy" decoding="async" />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <div class="more" data-more-wrap hidden={items.length <= batch ? true : undefined}>
+        <button type="button" class="btn btn--navy" data-more>Show more photos</button>
+        <p class="mono" data-progress></p>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="lightbox" data-lightbox-dialog aria-label="Photo viewer">
+    <button type="button" class="lb-btn lb-close" data-lb="close" aria-label="Close"><Icon name="close" size={22} /></button>
+    <button type="button" class="lb-btn lb-prev" data-lb="prev" aria-label="Previous photo"><Icon name="arrow-right" size={22} /></button>
+    <img alt="" data-lb-img />
+    <button type="button" class="lb-btn lb-next" data-lb="next" aria-label="Next photo"><Icon name="arrow-right" size={22} /></button>
+    <div class="lb-foot">
+      <p class="mono" data-lb-count></p>
+      <a class="lb-dl" data-lb-download download>Download <Icon name="download" size={14} /></a>
+    </div>
+  </dialog>
+
+  <CtaBand title="Be in the next set of pictures." />
+</BaseLayout>
+
+<script is:inline define:vars={{ supabase, year }}>
+  window.__bgsGallery = { supabase, year };
+</script>
+
+<script>
+  type Extra = { image_url: string; width: number | null; height: number | null; caption: string };
+  const grid = document.querySelector<HTMLUListElement>('[data-gallery]')!;
+  const moreWrap = document.querySelector<HTMLElement>('[data-more-wrap]')!;
+  const moreBtn = document.querySelector<HTMLButtonElement>('[data-more]')!;
+  const progress = document.querySelector<HTMLElement>('[data-progress]')!;
+  const countEl = document.querySelector<HTMLElement>('[data-count]');
+  const batch = Number(grid.dataset.batch);
+
+  const items = () => [...grid.querySelectorAll<HTMLLIElement>(':scope > li')];
+  const update = () => {
+    const all = items();
+    const shown = all.filter((li) => !li.hidden).length;
+    moreWrap.hidden = shown >= all.length;
+    progress.textContent = `Showing ${shown} of ${all.length}`;
+    if (countEl) countEl.textContent = `${all.length} photos`;
+  };
+  moreBtn.addEventListener('click', () => {
+    items()
+      .filter((li) => li.hidden)
+      .slice(0, batch)
+      .forEach((li) => (li.hidden = false));
+    update();
+  });
+
+  // Photos added from the BGS Dashboard (Website ▸ Gallery) come after the bundled ones.
+  const cfg = (window as unknown as { __bgsGallery: { supabase: { url: string; key: string } | null; year: string } }).__bgsGallery;
+  if (cfg.supabase) {
+    const q = `website_gallery_photos?select=image_url,width,height,caption&album=eq.${cfg.year}&is_published=eq.true&order=sort_order.asc,created_at.asc`;
+    fetch(`${cfg.supabase.url.replace(/\/$/, '')}/rest/v1/${q}`, {
+      headers: { apikey: cfg.supabase.key, Authorization: `Bearer ${cfg.supabase.key}` },
+    })
+      .then((r) => (r.ok ? r.json() : []))
+      .then((rows: Extra[]) => {
+        const hideFrom = items().filter((li) => !li.hidden).length >= batch;
+        for (const r of rows) {
+          const li = document.createElement('li');
+          li.hidden = hideFrom || items().filter((x) => !x.hidden).length >= batch;
+          const a = document.createElement('a');
+          a.href = r.image_url;
+          a.dataset.lightbox = '';
+          const img = document.createElement('img');
+          img.src = r.image_url;
+          img.alt = r.caption || `BGS ${cfg.year} photo`;
+          img.loading = 'lazy';
+          if (r.width && r.height) {
+            img.width = r.width;
+            img.height = r.height;
+          }
+          a.append(img);
+          li.append(a);
+          grid.append(li);
+        }
+        update();
+      })
+      .catch(() => {});
+  }
+  update();
+
+  // Lightbox
+  const dialog = document.querySelector<HTMLDialogElement>('[data-lightbox-dialog]')!;
+  const big = dialog.querySelector<HTMLImageElement>('[data-lb-img]')!;
+  const counter = dialog.querySelector<HTMLElement>('[data-lb-count]')!;
+  const dl = dialog.querySelector<HTMLAnchorElement>('[data-lb-download]')!;
+  let links: HTMLAnchorElement[] = [];
+  let index = 0;
+  const show = (i: number) => {
+    index = (i + links.length) % links.length;
+    const a = links[index];
+    big.src = a.href;
+    big.alt = a.querySelector('img')?.alt ?? '';
+    dl.href = a.href;
+    counter.textContent = `${index + 1} / ${links.length}`;
+  };
+  grid.addEventListener('click', (e) => {
+    const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-lightbox]');
+    if (!a) return;
+    e.preventDefault();
+    links = [...grid.querySelectorAll<HTMLAnchorElement>('[data-lightbox]')];
+    show(links.indexOf(a));
+    dialog.showModal();
+  });
+  dialog.addEventListener('click', (e) => {
+    const t = (e.target as HTMLElement).closest<HTMLElement>('[data-lb]');
+    if (t?.dataset.lb === 'close') dialog.close();
+    else if (t?.dataset.lb === 'prev') show(index - 1);
+    else if (t?.dataset.lb === 'next') show(index + 1);
+    else if (e.target === dialog) dialog.close();
+  });
+  dialog.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') show(index + 1);
+    if (e.key === 'ArrowLeft') show(index - 1);
+  });
+  let x0: number | null = null;
+  dialog.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+  dialog.addEventListener('touchend', (e) => {
+    if (x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40) show(index + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+</script>
+
+<style>
+  .g-count {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .tabs-wrap {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding-block: 0.85rem;
+    overflow-x: auto;
+  }
+  .tabs a {
+    padding: 0.5rem 1.1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+  .tabs a:hover,
+  .tabs a[aria-current='page'] {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: var(--white);
+  }
+  .masonry {
+    list-style: none;
+    columns: 2 220px;
+    column-gap: 0.75rem;
+  }
+  @media (min-width: 1100px) {
+    .masonry {
+      columns: 4;
+    }
+  }
+  .masonry li {
+    break-inside: avoid;
+    margin-bottom: 0.75rem;
+  }
+  .masonry li[hidden] {
+    display: none;
+  }
+  .masonry a {
+    display: block;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--paper-2);
+  }
+  .masonry img {
+    width: 100%;
+    height: auto;
+    transition: transform 0.6s var(--ease);
+  }
+  .masonry a:hover img {
+    transform: scale(1.04);
+  }
+  .more {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    margin-top: 2.5rem;
+  }
+  .more[hidden] {
+    display: none;
+  }
+  .more .mono {
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+  .lightbox {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 4rem 1rem 5rem;
+    border: 0;
+    background: rgba(2, 11, 38, 0.96);
+    color: var(--white);
+  }
+  .lightbox[open] {
+    display: grid;
+    place-items: center;
+  }
+  .lightbox::backdrop {
+    background: rgba(2, 11, 38, 0.8);
+  }
+  .lightbox > img {
+    max-width: min(1600px, 100%);
+    max-height: calc(100dvh - 9rem);
+    width: auto;
+    height: auto;
+    border-radius: 8px;
+  }
+  .lb-btn {
+    position: fixed;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border: 1px solid var(--line-dark);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--white);
+    cursor: pointer;
+  }
+  .lb-btn:hover {
+    background: var(--white);
+    color: var(--navy-950);
+  }
+  .lb-close {
+    top: 1rem;
+    right: 1rem;
+  }
+  .lb-prev {
+    left: 1rem;
+    top: 50%;
+    transform: translateY(-50%) scaleX(-1);
+  }
+  .lb-next {
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .lb-foot {
+    position: fixed;
+    bottom: 1.25rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .lb-dl {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--white);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+</style>

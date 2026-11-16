@@ -1,0 +1,12 @@
+---
+import EditionGallery from '../components/EditionGallery.astro';
+import { items2026 } from '../lib/gallery';
+---
+
+<EditionGallery
+  year="2026"
+  title="BGS 2026 · Board Committees: From Oversight to Impact"
+  lead="Thursday 12 November 2026 at the Labadi Beach Hotel, Accra. The arrivals, the stage, the panels, the exhibition and the people who made the day."
+  items={items2026()}
+  brochure={{ href: '/files/bgs-2026-brochure.pdf', label: 'Download the 2026 brochure' }}
+/>

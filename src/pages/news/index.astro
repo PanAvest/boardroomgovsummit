@@ -1,0 +1,155 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PageHero from '../../components/PageHero.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import CtaBand from '../../components/CtaBand.astro';
+import { getArticles, CATEGORIES } from '../../lib/cms';
+
+export const prerender = false;
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=600');
+
+const posts = await getArticles();
+const [featured, ...rest] = posts;
+const categories = ['All', ...CATEGORIES];
+const counts = Object.fromEntries(
+  categories.map((c) => [c, c === 'All' ? posts.length : posts.filter((p) => p.category === c).length]),
+);
+---
+
+<BaseLayout
+  title="News & Insights"
+  description="Announcements, speeches, press coverage and governance insights from the Boardroom Governance Summit and its convener, Ing. Prof. Douglas Boateng."
+>
+  <PageHero
+    compact
+    eyebrow="Media centre"
+    title="News &amp; insights"
+    lead="Announcements from the summit, speeches from the stage, coverage of every edition, and the op-ed series that keeps the boardroom conversation going between summits."
+    crumbs={[{ label: 'News & Insights' }]}
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="filters" role="toolbar" aria-label="Filter by category">
+        {
+          categories.map((c) => (
+            <button type="button" class="chip" data-filter={c} aria-pressed={c === 'All' ? 'true' : 'false'}>
+              {c} <span>{counts[c]}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      {
+        featured && (
+          <div class="featured" data-item data-category={featured.category}>
+            <NewsCard post={featured} featured />
+          </div>
+        )
+      }
+
+      <div class="grid grid--3 news-grid">
+        {
+          rest.map((p) => (
+            <div data-item data-category={p.category}>
+              <NewsCard post={p} />
+            </div>
+          ))
+        }
+      </div>
+      <p class="empty" hidden>No posts in this category yet.</p>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Never miss a dispatch."
+    text="Get summit news, speeches and new insights from the convener in your inbox, plus first notice of BGS 2027."
+    primary={{ label: 'Register interest for BGS 2027', href: '/registration/' }}
+    secondary={{ label: 'Contact the team', href: '/contact/' }}
+  />
+</BaseLayout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('[data-filter]');
+  const items = document.querySelectorAll<HTMLElement>('[data-item]');
+  const empty = document.querySelector<HTMLElement>('.empty');
+
+  function apply(cat: string) {
+    let shown = 0;
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === cat)));
+    items.forEach((el) => {
+      const show = cat === 'All' || el.dataset.category === cat;
+      el.hidden = !show;
+      if (show) shown++;
+    });
+    if (empty) empty.hidden = shown > 0;
+    const url = new URL(location.href);
+    if (cat === 'All') url.searchParams.delete('category');
+    else url.searchParams.set('category', cat);
+    history.replaceState(null, '', url);
+  }
+
+  chips.forEach((c) => c.addEventListener('click', () => apply(c.dataset.filter!)));
+  const initial = new URLSearchParams(location.search).get('category');
+  if (initial && [...chips].some((c) => c.dataset.filter === initial)) apply(initial);
+</script>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 42px;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    background: var(--white);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .chip span {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+  .chip:hover {
+    border-color: var(--ink);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: var(--white);
+  }
+  .chip[aria-pressed='true'] span {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .featured {
+    margin-bottom: 4rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .featured[hidden] {
+    display: none;
+  }
+  .news-grid {
+    row-gap: 3.5rem;
+  }
+  [data-item][hidden] {
+    display: none;
+  }
+  .empty {
+    padding: 3rem 0;
+    text-align: center;
+    color: var(--muted);
+  }
+</style>

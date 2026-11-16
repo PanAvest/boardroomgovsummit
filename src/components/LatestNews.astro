@@ -1,0 +1,21 @@
+---
+/**
+ * Server island: rendered on request (and cached for a minute) so pages that
+ * are otherwise static always show the newest articles from the dashboard.
+ */
+import NewsCard from './NewsCard.astro';
+import { getArticles, type Category } from '../lib/cms';
+
+interface Props {
+  limit?: number;
+  category?: Category;
+}
+const { limit = 3, category } = Astro.props;
+const all = await getArticles();
+const posts = (category ? all.filter((a) => a.category === category) : all).slice(0, limit);
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=600');
+---
+
+<div class="grid grid--3">
+  {posts.map((p) => <NewsCard post={p} />)}
+</div>

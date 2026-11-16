@@ -1,0 +1,849 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ThankYouBanner from '../components/ThankYouBanner.astro';
+import SpeakerCard from '../components/SpeakerCard.astro';
+import SpeakerDialog from '../components/SpeakerDialog.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { partners2026, mediaPartners2026, contact, nextEdition } from '../data/site';
+import { chairman, convener, afternoonChair, guestsOfHonour, panels, programme2026, ampm } from '../data/bgs2026';
+import { items2026 } from '../lib/gallery';
+
+import heroImg from '../assets/images/events/2026/bgs-2026-group-photo.jpg';
+import wordmark from '../assets/images/brand/bgs-2026-wordmark.png';
+import aboutImg from '../assets/images/events/2026/bgs-2026-audience.jpg';
+import course from '../assets/images/promo/certified-board-governance-course.png';
+import venueImg from '../assets/images/events/2024/bgs-2024-26.jpg';
+import ctaImg from '../assets/images/events/2026/bgs-2026-group-photo.jpg';
+
+const leads = [
+  { ...chairman, badge: 'Chairman of the Summit', tone: 'red' as const },
+  { ...convener, badge: 'Convener', tone: 'navy' as const },
+  { ...afternoonChair, badge: 'Afternoon Session Chair', tone: 'gold' as const },
+];
+const photos = items2026();
+const pick = [1, 16, 33, 60, 95, 130, 175, 220, 280].map((i) => photos[i]).filter(Boolean);
+const brochurePages = Object.entries(
+  import.meta.glob<{ default: ImageMetadata }>('../assets/images/brochure-2026/*.jpg', { eager: true }),
+)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, m]) => m.default);
+const opening = programme2026.slice(0, 6);
+
+const committees = ['Audit', 'Risk', 'Remuneration', 'Nominations', 'Finance & Investment', 'Procurement', 'Technology', 'ESG'];
+
+const reflections = [
+  { title: 'Committees must be built on competence, not convenience.', text: 'An audit committee without genuine financial expertise, or a risk committee without people who understand the risks the business actually faces, cannot fulfil its purpose. Composition must follow mandate.' },
+  { title: 'Committees must have real mandates and the independence to exercise them.', text: 'Clear terms of reference, unrestricted access to information and the right to independent advice. A committee that depends entirely on management will only ever see what management chooses to show it.' },
+  { title: 'Committees must connect to strategy.', text: 'The finest committees look forward, asking whether controls, investments, people and culture are fit for where the organisation is going, and how responsibility can become competitive advantage.' },
+  { title: 'Committees must report in a way that informs decisions.', text: 'The full board needs clear insight into what was found, what remains unresolved and what it must decide. Impact is measured by the quality of the decisions that follow.' },
+];
+---
+
+<BaseLayout
+  title="BGS 2026: Board Committees, From Oversight to Impact"
+  description="A recap of the Boardroom Governance Summit 2026, held on 12 November 2026 at the Labadi Beach Hotel, Accra, under the theme 'Board Committees: From Oversight to Impact'."
+>
+  <!-- HERO -->
+  <section class="s-hero">
+    <span class="s-shape s-shape--1" aria-hidden="true"></span>
+    <span class="s-shape s-shape--2" aria-hidden="true"></span>
+    <div class="container s-hero__inner">
+      <div class="s-hero__media">
+        <div class="s-hero__circle">
+          <Image src={heroImg} alt="Speakers, partners and guests on stage at BGS 2026" widths={[500, 800, 1100]} sizes="(min-width: 900px) 40vw, 85vw" loading="eager" />
+        </div>
+        <Image src={wordmark} alt="Boardroom Governance Summit 2026" width={300} densities={[1, 2]} class="s-hero__wordmark" />
+      </div>
+      <div class="s-hero__copy">
+        <p class="eyebrow">Summit 2026 · Third edition</p>
+        <h1>Board Committees: from oversight to impact.</h1>
+        <div class="s-hero__when">
+          <p>Thursday 12 November 2026</p>
+          <p>Labadi Beach Hotel, Accra, and online</p>
+        </div>
+        <dl class="s-hero__people">
+          <div>
+            <dt>Chairman</dt>
+            <dd>H.E. Dr. Ekwow Spio-Garbrah</dd>
+          </div>
+          <div>
+            <dt>Convener</dt>
+            <dd>Ing. Prof. Douglas Boateng</dd>
+          </div>
+          <div>
+            <dt>Organiser</dt>
+            <dd>PanAvest International &amp; Partners</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <ThankYouBanner showRecapLink={false} />
+
+  <!-- ABOUT -->
+  <section class="section section--dark">
+    <div class="container split">
+      <div class="stack" style="--stack:1.25rem">
+        <h2>About the 2026 Summit</h2>
+        <p class="s-intro">
+          BGS 2026 broke new ground by examining, for the first time on an African platform of this scale, the
+          strategic importance of board committees.
+        </p>
+        <p>
+          Most boards treat committees as a compliance formality, a box ticked between meetings. The 2026 summit
+          challenged that directly: can your Audit, ESG or Finance Committee actually move the needle on
+          organisational performance, or is it simply producing minutes nobody reads?
+        </p>
+        <p>
+          Delegates joined from across Ghana and the continent, in the hall at the Labadi Beach Hotel and online,
+          for a full day of keynote addresses, panels and open debate.
+        </p>
+        <ul class="committees" aria-label="Committees under discussion">
+          {committees.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+      <div class="media s-about-img" data-reveal>
+        <Image src={aboutImg} alt="Delegates in the hall at BGS 2026" widths={[500, 900]} sizes="(min-width: 900px) 45vw, 92vw" />
+      </div>
+    </div>
+  </section>
+
+  <!-- SPEAKERS -->
+  <section class="section section--navy">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow eyebrow--gold">On the stage</p>
+        <h2>The Chairman, the Convener and our Special Guests of Honour.</h2>
+        <p class="lead">Select a portrait to read the profile.</p>
+      </div>
+      <div class="speaker-grid speaker-grid--center">{leads.map((p) => <SpeakerCard speaker={p} />)}</div>
+      <div class="speaker-grid speaker-grid--center" style="margin-top:3rem">{guestsOfHonour.filter((g) => g.key !== afternoonChair.key).map((p) => <SpeakerCard speaker={p} />)}</div>
+    </div>
+  </section>
+
+  <!-- PANELS -->
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Three committee panels</p>
+          <h2>From the chairperson's table to the audit committee.</h2>
+        </div>
+        <a class="btn btn--navy" href="/agenda/">Full programme <Icon name="arrow-right" /></a>
+      </div>
+      <div class="panels">
+        {
+          panels.map((p) => (
+            <article class="pcard" style={`--p1:${p.colors[0]};--p2:${p.colors[1]}`} data-reveal>
+              <p class="mono">
+                Panel {p.n} · {p.kicker}
+              </p>
+              <h3>{p.title}</h3>
+              <p class="pcard__intro">{p.intro}</p>
+              <ul class="pcard__faces">
+                {[p.moderator, ...p.panelists].map((x, i) => (
+                  <li title={x.name}>
+                    {x.image && <Image src={x.image} alt="" width={96} height={120} />}
+                    <span>
+                      {x.name}
+                      {i === 0 && <em> · Moderator</em>}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+      <div class="opening">
+        <p class="mono">Opening session</p>
+        <ol>
+          {
+            opening.map((r) => (
+              <li>
+                <span class="mono">{ampm(r.time)}</span>
+                <strong>{r.title}</strong>
+                <span>{r.detail}</span>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- REFLECTIONS -->
+  <section class="section">
+    <div class="container split split--top">
+      <div class="stack sticky" style="--stack:1.25rem">
+        <p class="eyebrow">Chairman's address</p>
+        <h2>“The Africa we desire starts in the boardroom.”</h2>
+        <p class="lead">
+          H.E. Dr. Ekwow Spio-Garbrah offered four reflections on what it takes for committees to move from oversight to
+          impact.
+        </p>
+        <a class="btn btn--navy" href="/2026/11/13/chairmans-address-the-africa-we-desire-starts-in-the-boardroom/"
+          >Read the full address <Icon name="arrow-right" /></a
+        >
+      </div>
+      <ol class="reflections">
+        {
+          reflections.map((r, i) => (
+            <li data-reveal>
+              <span class="reflections__n">{i + 1}</span>
+              <div>
+                <h3>{r.title}</h3>
+                <p>{r.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- PHOTOS -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow eyebrow--gold">In pictures</p>
+          <h2>Moments from BGS 2026.</h2>
+        </div>
+        <a class="btn" href="/2026-gallery/">See all {photos.length} photos <Icon name="arrow-right" /></a>
+      </div>
+      <div class="photos">
+        {
+          pick.map((ph, i) => (
+            <a href="/2026-gallery/" class:list={['media', `photos__${i}`]}>
+              <img src={i === 0 ? ph.full : ph.thumb} alt={ph.alt} loading="lazy" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- LETTER -->
+  <section class="section">
+    <div class="container container--narrow letter">
+      <p class="eyebrow">A letter to delegates</p>
+      <blockquote>
+        <p>
+          If your board committees were removed tomorrow, would anyone notice the difference? If the honest answer is
+          “not much,” then the work of yesterday has only just begun.
+        </p>
+        <p>
+          Africa does not lack talent, resources or ambition. What we must continue to build is the discipline to
+          govern them well. Good governance is not a burden of compliance but a privilege of stewardship.
+        </p>
+      </blockquote>
+      <p class="letter__sig"><strong>Ing. Prof. Douglas Boateng</strong>, Founder and Convenor</p>
+      <a class="link-arrow" href="/2026/11/13/thank-you-for-joining-bgs-2026/">Read the full letter <Icon name="arrow-right" /></a>
+    </div>
+  </section>
+
+  <!-- BROCHURE -->
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">The official brochure</p>
+          <h2>BGS 2026, in sixteen pages.</h2>
+        </div>
+        <div class="btn-row">
+          <a class="btn btn--navy" href="/files/bgs-2026-brochure.pdf" download><Icon name="download" size={18} /> Download PDF</a>
+        </div>
+      </div>
+      <ul class="pages" aria-label="Brochure pages">
+        {
+          brochurePages.map((pg, i) => (
+            <li>
+              <a href="/files/bgs-2026-brochure.pdf" aria-label={`Brochure page ${i + 1}`}>
+                <Image src={pg} alt="" widths={[240, 400]} sizes="220px" />
+              </a>
+              <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- WHAT'S NEXT -->
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow eyebrow--gold">What's next</p>
+        <h2>The work continues after the summit.</h2>
+      </div>
+      <div class="next">
+        <article class="next__card next__card--course">
+          <div class="next__copy">
+            <span class="pill pill--gold">Coming soon</span>
+            <h3>Certified Board Governance Course</h3>
+            <p>
+              An insightful, engaging and self-paced learning experience. BGS 2026 delegates: watch your registration
+              email for course commencement details and participation guidelines.
+            </p>
+            <a class="link-arrow on-dark" href="/2026/11/13/certified-board-governance-course/">Course announcement <Icon name="arrow-right" /></a>
+          </div>
+          <Image src={course} alt="Certified Board Governance Course: coming soon" widths={[300, 500]} sizes="240px" class="next__poster" />
+        </article>
+        <article class="next__card">
+          <div class="next__copy">
+            <span class="pill pill--red">BGS {nextEdition.year}</span>
+            <h3>Register your interest for {nextEdition.year}</h3>
+            <p>
+              Dates, theme and speakers will be announced soon. Register now and you'll hear first, whether you plan to
+              attend, sponsor or speak.
+            </p>
+            <a class="btn" href={nextEdition.href}>Register interest <Icon name="arrow-right" /></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--center">
+        <p class="eyebrow">With thanks</p>
+        <h2>BGS 2026 was made possible by partners committed to better governance.</h2>
+        <p class="lead">
+          Your generous contributions, collaboration and belief in our vision were instrumental. Thank you for being an
+          integral part of BGS 2026.
+        </p>
+      </div>
+      <ul class="logo-grid">
+        {
+          partners2026.map((p) => (
+            <li>
+              <Image src={p.logo} alt={p.name} height={72} densities={[1, 2]} />
+            </li>
+          ))
+        }
+      </ul>
+      <p class="mono media-title">Media partners</p>
+      <ul class="logo-grid logo-grid--media">
+        {
+          mediaPartners2026.map((p) => (
+            <li>
+              <Image src={p.logo} alt={p.name} height={72} densities={[1, 2]} />
+            </li>
+          ))
+        }
+      </ul>
+      <p class="center-link">
+        <a class="link-arrow" href="/partners/">All partners, past and present <Icon name="arrow-right" /></a>
+      </p>
+    </div>
+  </section>
+
+  <!-- LOCATION -->
+  <section class="section section--paper">
+    <div class="container split">
+      <div class="media venue" data-reveal>
+        <Image src={venueImg} alt="Delegates arriving at the Labadi Beach Hotel, Accra" widths={[500, 900]} sizes="(min-width: 900px) 45vw, 92vw" />
+      </div>
+      <div class="stack" style="--stack:1.25rem">
+        <p class="eyebrow">Location</p>
+        <h2>Our home: the Labadi Beach Hotel.</h2>
+        <address>
+          <strong>Labadi Beach Hotel</strong><br />
+          Labadi, Accra<br />
+          Ghana
+        </address>
+        <a class="btn btn--navy" href={contact.mapsHref} target="_blank" rel="noopener">Open in Maps <Icon name="arrow-up-right" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUESTIONS -->
+  <section class="section section--tight">
+    <div class="container split">
+      <div class="stack">
+        <p class="eyebrow">Questions</p>
+        <h2>Have a question?</h2>
+      </div>
+      <p class="lead">
+        For questions about attendance, sponsorship or the course, contact
+        <a href={`mailto:${contact.email}`}>{contact.email}</a> or call <a href={contact.phoneHref}>{contact.phone}</a>.
+      </p>
+    </div>
+  </section>
+
+  <SpeakerDialog />
+  <CtaBand image={ctaImg} text={`Secure your place at the Boardroom Governance Summit ${nextEdition.year}.`} />
+</BaseLayout>
+
+<style>
+  /* Hero */
+  .s-hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy-950);
+    color: var(--white);
+    padding-block: clamp(3.5rem, 2.5rem + 5vw, 7rem);
+  }
+  .s-hero__inner {
+    position: relative;
+    display: grid;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  @media (min-width: 900px) {
+    .s-hero__inner {
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 5rem;
+    }
+  }
+  .s-hero__media {
+    position: relative;
+    max-width: 480px;
+    width: 100%;
+    justify-self: center;
+  }
+  .s-hero__circle {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .s-hero__circle :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 60%;
+  }
+  :global(.s-hero__wordmark) {
+    position: absolute;
+    top: 6%;
+    left: max(-8%, -2rem);
+    width: 62%;
+    height: auto;
+    filter: drop-shadow(0 6px 22px rgba(0, 0, 0, 0.55));
+  }
+  @media (max-width: 640px) {
+    :global(.s-hero__wordmark) {
+      left: 0;
+      width: 56%;
+    }
+  }
+  .s-hero__copy {
+    display: grid;
+    gap: 1.6rem;
+    justify-items: start;
+  }
+  .s-hero h1 {
+    max-width: 14ch;
+    font-size: clamp(2.5rem, 1.6rem + 3.8vw, 4.9rem);
+  }
+  .s-hero__when {
+    display: grid;
+    padding: 0.9rem 1.3rem;
+    background: var(--red);
+    border-radius: 14px;
+    font-size: 1.08rem;
+    line-height: 1.35;
+  }
+  .s-hero__when p {
+    color: var(--white);
+  }
+  .s-hero__people {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 2.25rem;
+    margin: 0;
+  }
+  .s-hero__people dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .s-hero__people dd {
+    margin: 0.25rem 0 0;
+    font-weight: 600;
+  }
+  .s-shape {
+    position: absolute;
+    border-radius: 50%;
+  }
+  .s-shape--1 {
+    width: 480px;
+    height: 480px;
+    left: -240px;
+    bottom: -220px;
+    background: #134a6e;
+    opacity: 0.5;
+  }
+  .s-shape--2 {
+    width: 300px;
+    height: 300px;
+    right: -150px;
+    top: 30%;
+    background: #1b6b63;
+    opacity: 0.45;
+  }
+
+  /* About */
+  .s-intro {
+    font-size: var(--fs-md);
+    font-weight: 600;
+    color: var(--white) !important;
+  }
+  .committees {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+  }
+  .committees li {
+    padding: 0.4rem 0.85rem;
+    border: 1px solid var(--line-dark);
+    border-radius: 999px;
+    font-size: 0.85rem;
+  }
+  .s-about-img {
+    aspect-ratio: 4 / 3;
+  }
+
+  /* Speakers */
+  .stage-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.25rem;
+  }
+  .stage-grid + .stage-grid {
+    margin-top: 3rem;
+  }
+  @media (min-width: 900px) {
+    .stage-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .stage-grid--3 {
+      grid-template-columns: repeat(3, minmax(0, 250px));
+      justify-content: center;
+    }
+  }
+  .panels {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 1000px) {
+    .panels {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .pcard {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    padding: 1.6rem;
+    border-radius: var(--radius);
+    color: var(--white);
+    background: linear-gradient(140deg, var(--p1), var(--p2));
+  }
+  .pcard .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .pcard h3 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+  .pcard__intro {
+    font-size: 0.93rem;
+    color: rgba(255, 255, 255, 0.88);
+  }
+  .pcard__faces {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .pcard__faces li {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+  }
+  .pcard__faces :global(img) {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    background: rgba(255, 255, 255, 0.2);
+    flex: none;
+  }
+  .pcard__faces em {
+    font-style: normal;
+    font-weight: 400;
+    opacity: 0.8;
+  }
+  .opening {
+    margin-top: 3rem;
+    padding: 1.75rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .opening > .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 1rem;
+  }
+  .opening ol {
+    list-style: none;
+    display: grid;
+    gap: 0;
+  }
+  .opening li {
+    display: grid;
+    gap: 0.25rem 1.5rem;
+    padding: 0.8rem 0;
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 800px) {
+    .opening li {
+      grid-template-columns: 90px 260px 1fr;
+      align-items: baseline;
+    }
+  }
+  .opening li .mono {
+    color: var(--navy-800);
+  }
+  .opening li span:last-child {
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+  .pages {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 1rem;
+    scroll-snap-type: x mandatory;
+  }
+  .pages li {
+    flex: none;
+    width: 200px;
+    display: grid;
+    gap: 0.5rem;
+    scroll-snap-align: start;
+  }
+  .pages a {
+    display: block;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.25s var(--ease);
+  }
+  .pages a:hover {
+    transform: translateY(-4px);
+  }
+  .pages .mono {
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .media-title {
+    margin: 2.5rem 0 1rem;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+  .section--navy :global(.speaker p) {
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .center-link {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  /* Reflections */
+  @media (min-width: 900px) {
+    .sticky {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+  .reflections {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  .reflections li {
+    display: grid;
+    grid-template-columns: 3.25rem 1fr;
+    gap: 1rem;
+    padding: 1.75rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .reflections__n {
+    display: grid;
+    place-items: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: var(--white);
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+  .reflections h3 {
+    font-size: 1.2rem;
+    line-height: 1.3;
+    margin-bottom: 0.6rem;
+  }
+  .reflections p {
+    color: var(--muted);
+  }
+
+  /* Photos */
+  .photos {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .photos .media {
+    aspect-ratio: 1;
+  }
+  .photos .media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--ease);
+  }
+  .photos .media:hover img {
+    transform: scale(1.05);
+  }
+  .photos__0 {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 9 !important;
+  }
+  @media (min-width: 900px) {
+    .photos {
+      grid-template-columns: repeat(4, 1fr);
+      grid-auto-rows: 220px;
+    }
+    .photos .media {
+      aspect-ratio: auto;
+    }
+    .photos__0 {
+      grid-column: span 2;
+      grid-row: span 2;
+      aspect-ratio: auto !important;
+    }
+  }
+
+  /* Letter */
+  .letter {
+    display: grid;
+    gap: 1.75rem;
+    justify-items: start;
+  }
+  .letter blockquote {
+    margin: 0;
+    display: grid;
+    gap: 1.25rem;
+  }
+  .letter blockquote p {
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2.1rem);
+    font-weight: 650;
+    letter-spacing: -0.025em;
+    line-height: 1.25;
+    color: var(--navy-900);
+  }
+  .letter__sig {
+    color: var(--muted);
+  }
+
+  /* Next */
+  .next {
+    display: grid;
+    gap: 1.25rem;
+  }
+  @media (min-width: 900px) {
+    .next {
+      grid-template-columns: 1.4fr 1fr;
+    }
+  }
+  .next__card {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .next__copy {
+    display: grid;
+    gap: 1rem;
+    justify-items: start;
+  }
+  .next__copy h3 {
+    font-size: 1.6rem;
+  }
+  :global(.next__poster) {
+    width: 200px;
+    height: auto;
+    border-radius: 10px;
+    flex: none;
+  }
+  @media (max-width: 640px) {
+    .next__card--course {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+    }
+  }
+
+  /* Partners */
+  .logo-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 0.75rem;
+  }
+  .logo-grid li {
+    display: grid;
+    place-items: center;
+    height: 110px;
+    padding: 1rem;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .logo-grid :global(img) {
+    max-height: 68px;
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+
+  /* Venue */
+  .venue {
+    aspect-ratio: 4 / 3;
+  }
+  address {
+    font-style: normal;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+</style>

@@ -1,0 +1,12 @@
+---
+import EditionGallery from '../components/EditionGallery.astro';
+import { editionItems } from '../lib/gallery';
+---
+
+<EditionGallery
+  year="2025"
+  title="BGS 2025 · Daring to be Different"
+  lead="A visual recap of the 2025 summit: the energy, moments and milestones of 14 October 2025, from the opening keynote to the final group photograph."
+  items={await editionItems('2025')}
+  brochure={{ href: '/wp-content/uploads/2025/10/BGS-BROCHURE.pdf', label: 'Download the 2025 brochure' }}
+/>

@@ -1,0 +1,268 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SpeakerCard from '../components/SpeakerCard.astro';
+import SpeakerDialog from '../components/SpeakerDialog.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { speakers, speakers2024Roles, editions, nextEdition } from '../data/site';
+import { chairman, convener, afternoonChair, guestsOfHonour, panels } from '../data/bgs2026';
+import ctaImg from '../assets/images/events/2024/bgs-2024-394.jpg';
+
+const e2026 = editions.find((e) => e.year === 2026)!;
+const earlier = editions.filter((e) => e.year !== 2026).map((e) => ({ ...e, people: speakers.filter((s) => s.edition === e.year) }));
+const leads = [
+  { ...chairman, badge: 'Chairman of the Summit', tone: 'red' as const },
+  { ...convener, badge: 'Convener', tone: 'navy' as const },
+  { ...afternoonChair, badge: 'Afternoon Session Chair', tone: 'gold' as const },
+];
+const panelTone = ['plum', 'green', 'gold'] as const;
+---
+
+<BaseLayout
+  title="Past Speakers & Panellists"
+  description="The Chairman, Special Guests of Honour, moderators and panellists of every Boardroom Governance Summit since 2024, with profiles."
+>
+  <PageHero
+    compact
+    eyebrow="Speakers"
+    title="Past speakers &amp; panellists."
+    lead="Chiefs of staff, ministers, chairpersons, regulators, presidents of professional bodies and practitioners: the people who have taken the BGS stage since 2024. Select a portrait to read the profile."
+    crumbs={[{ label: 'Programme', href: '/agenda/' }, { label: 'Past Speakers' }]}
+  >
+    <nav class="jump" aria-label="Editions">
+      <a href="#bgs-2026">2026</a><a href="#bgs-2025">2025</a><a href="#bgs-2024">2024</a>
+    </nav>
+  </PageHero>
+
+  <section class="section" id="bgs-2026">
+    <div class="container">
+      <div class="edition-head">
+        <span class="edition-year">2026</span>
+        <div class="stack" style="--stack:0.6rem">
+          <p class="eyebrow">{e2026.label} · {e2026.date}</p>
+          <h2>{e2026.theme}</h2>
+        </div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__title">Chairman, Convener and Afternoon Chair</h3>
+        <div class="speaker-grid speaker-grid--5">{leads.map((s) => <SpeakerCard speaker={s} />)}</div>
+      </div>
+
+      <div class="group">
+        <h3 class="group__title">Special Guests of Honour</h3>
+        <div class="speaker-grid speaker-grid--5">{guestsOfHonour.filter((g) => g.key !== afternoonChair.key).map((s) => <SpeakerCard speaker={s} />)}</div>
+      </div>
+
+      {
+        panels.map((p, i) => (
+          <div class="group panel" style={`--p1:${p.colors[0]};--p2:${p.colors[1]}`}>
+            <div class="panel__head">
+              <span class="panel__n">Panel {p.n}</span>
+              <div>
+                <h3>{p.title}</h3>
+                <p class="muted">{p.perspective}</p>
+              </div>
+            </div>
+            <div class="speaker-grid speaker-grid--5">
+              <SpeakerCard speaker={{ ...p.moderator, badge: 'Moderator', tone: panelTone[i] }} />
+              {p.panelists.map((s) => (
+                <SpeakerCard speaker={{ ...s, tone: panelTone[i] }} />
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  {
+    earlier.map((e, i) => (
+      <section class:list={['section', { 'section--paper': i % 2 === 0 }]} id={`bgs-${e.year}`}>
+        <div class="container">
+          <div class="edition-head">
+            <span class="edition-year">{e.year}</span>
+            <div class="stack" style="--stack:0.6rem">
+              <p class="eyebrow">
+                {e.label} · {e.date}
+              </p>
+              <h2>{e.theme}</h2>
+            </div>
+          </div>
+          <div class="speaker-grid speaker-grid--5">
+            {e.people.map((s) => (
+              <SpeakerCard speaker={s} />
+            ))}
+          </div>
+          {e.year === 2024 && (
+            <div class="roles">
+              <p class="mono">Also on the 2024 programme</p>
+              <ul>
+                {speakers2024Roles.map((r) => (
+                  <li>{r}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section section--tight">
+    <div class="container container--narrow nominate">
+      <h2>Know someone who should be on the {nextEdition.year} stage?</h2>
+      <p class="lead">
+        We welcome nominations of chairpersons, directors, regulators and governance thinkers with something honest to
+        say.
+      </p>
+      <a class="btn btn--navy" href="/registration/?interest=speak">Nominate a speaker</a>
+    </div>
+  </section>
+
+  <SpeakerDialog />
+  <CtaBand image={ctaImg} />
+</BaseLayout>
+
+<style>
+  .jump {
+    display: flex;
+    gap: 0.5rem;
+  }
+  .jump a {
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--line-dark);
+    border-radius: 999px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .jump a:hover {
+    background: var(--white);
+    color: var(--navy-950);
+  }
+  section[id] {
+    scroll-margin-top: var(--header-h);
+  }
+  .edition-head {
+    display: grid;
+    gap: 1.5rem;
+    align-items: end;
+    margin-bottom: 3rem;
+  }
+  @media (min-width: 900px) {
+    .edition-head {
+      grid-template-columns: auto 1fr;
+      gap: 3rem;
+    }
+  }
+  .edition-year {
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 2.5rem + 6vw, 8rem);
+    font-weight: 800;
+    letter-spacing: -0.06em;
+    line-height: 0.85;
+    color: var(--red);
+  }
+  .edition-head h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.4rem);
+    max-width: 30ch;
+  }
+  .group + .group {
+    margin-top: 4rem;
+  }
+  .group__title {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.9rem;
+    border-bottom: 2px solid var(--ink);
+    font-size: 1.3rem;
+  }
+  .speakers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.25rem;
+  }
+  @media (min-width: 900px) {
+    .speakers {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+    .speakers--3 {
+      grid-template-columns: repeat(3, minmax(0, 260px));
+    }
+  }
+  @media (min-width: 1100px) {
+    .panel .speakers {
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+    }
+  }
+  .panel__head {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1.25rem;
+    align-items: center;
+    margin-bottom: 1.75rem;
+    padding: 1.25rem 1.4rem;
+    border-radius: var(--radius);
+    background: linear-gradient(120deg, var(--p1), var(--p2));
+    color: var(--white);
+  }
+  @media (max-width: 640px) {
+    .panel__head {
+      grid-template-columns: 1fr;
+      gap: 0.7rem;
+      justify-items: start;
+    }
+  }
+  .panel__head .muted {
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.92rem;
+    margin-top: 0.3rem;
+  }
+  .panel__head h3 {
+    font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+  }
+  .panel__n {
+    padding: 0.4rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.18);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .roles {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .roles .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+  .roles ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+  }
+  .roles li {
+    padding: 0.5rem 0.95rem;
+    border: 1px solid var(--line-strong);
+    border-radius: 999px;
+    font-size: 0.9rem;
+    background: var(--white);
+  }
+  .nominate {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: center;
+    text-align: center;
+  }
+  .nominate h2 {
+    font-size: var(--fs-h3);
+  }
+</style>

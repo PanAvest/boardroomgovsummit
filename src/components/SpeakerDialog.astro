@@ -1,0 +1,120 @@
+---
+import Icon from './Icon.astro';
+---
+
+<dialog class="sp-dialog" data-speaker-dialog aria-labelledby="sp-name">
+  <button type="button" class="sp-close" data-close aria-label="Close profile"><Icon name="close" size={20} /></button>
+  <div class="sp-body">
+    <div class="sp-photo" data-photo></div>
+    <div class="sp-text">
+      <p class="eyebrow">Speaker profile</p>
+      <h2 id="sp-name" data-name></h2>
+      <p class="sp-role" data-role></p>
+      <p class="sp-bio" data-bio></p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('[data-speaker-dialog]');
+  if (dialog) {
+    const set = (sel: string, v: string) => ((dialog.querySelector(sel) as HTMLElement).textContent = v);
+    document.addEventListener('click', (e) => {
+      const card = (e.target as HTMLElement).closest<HTMLElement>('[data-speaker]');
+      if (!card) return;
+      set('[data-name]', card.dataset.name ?? '');
+      set('[data-role]', card.dataset.role ?? '');
+      set('[data-bio]', card.dataset.bio ?? '');
+      const photo = dialog.querySelector<HTMLElement>('[data-photo]')!;
+      const img = card.querySelector('img');
+      photo.replaceChildren();
+      photo.style.background = getComputedStyle(card).background;
+      if (img) {
+        const clone = img.cloneNode() as HTMLImageElement;
+        clone.removeAttribute('loading');
+        photo.append(clone);
+      }
+      dialog.showModal();
+    });
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog || (e.target as HTMLElement).closest('[data-close]')) dialog.close();
+    });
+  }
+</script>
+
+<style>
+  .sp-dialog {
+    width: min(880px, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--white);
+    color: var(--ink);
+    box-shadow: 0 40px 80px -20px rgba(2, 11, 38, 0.5);
+  }
+  .sp-dialog::backdrop {
+    background: rgba(2, 11, 38, 0.72);
+    backdrop-filter: blur(4px);
+  }
+  .sp-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .sp-body {
+    display: grid;
+  }
+  @media (min-width: 720px) {
+    .sp-body {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+  .sp-photo {
+    position: relative;
+    min-height: 280px;
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+  }
+  @media (min-width: 720px) {
+    .sp-photo {
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+  }
+  .sp-photo :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+  }
+  .sp-text {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+  }
+  .sp-text h2 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
+    padding-right: 2rem;
+  }
+  .sp-role {
+    font-weight: 600;
+    color: var(--navy-800);
+  }
+  .sp-bio {
+    color: var(--ink-2);
+    line-height: 1.7;
+  }
+</style>

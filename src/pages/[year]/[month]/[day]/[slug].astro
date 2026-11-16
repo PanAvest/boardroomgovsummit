@@ -1,0 +1,345 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import Icon from '../../../../components/Icon.astro';
+import NewsCard from '../../../../components/NewsCard.astro';
+import {
+  getArticle,
+  getArticles,
+  articleUrl,
+  formatDate,
+  readingTime,
+  renderMarkdown,
+  imageUrl,
+  imageSrcset,
+} from '../../../../lib/cms';
+import { nextEdition } from '../../../../data/site';
+
+export const prerender = false;
+
+const { year, month, day, slug } = Astro.params;
+const post = await getArticle(slug ?? '');
+if (!post) return new Response(null, { status: 404, statusText: 'Not found' });
+
+// Same article, wrong date in the address (e.g. its date was changed): send to the right one.
+const canonicalPath = articleUrl(post);
+if (`/${year}/${month}/${day}/${slug}/` !== canonicalPath) return Astro.redirect(canonicalPath, 301);
+
+Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=600');
+
+const all = await getArticles();
+const index = all.findIndex((p) => p.slug === post.slug);
+const newer = index > 0 ? all[index - 1] : null;
+const older = index >= 0 && index < all.length - 1 ? all[index + 1] : null;
+const related = all
+  .filter((p) => p.slug !== post.slug)
+  .sort((a, b) => Number(b.category === post.category) - Number(a.category === post.category))
+  .slice(0, 3);
+
+const { title, date, category, excerpt, cover, coverAlt, author } = post;
+const html = renderMarkdown(post.body);
+const url = new URL(canonicalPath, Astro.site).href;
+const minutes = readingTime(post.body);
+
+const share = [
+  { label: 'LinkedIn', icon: 'linkedin', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}` },
+  { label: 'X', icon: 'x', href: `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}` },
+  { label: 'Facebook', icon: 'facebook', href: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}` },
+  { label: 'WhatsApp', icon: 'whatsapp', href: `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}` },
+] as const;
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'NewsArticle',
+  headline: title,
+  datePublished: date.toISOString(),
+  description: excerpt,
+  mainEntityOfPage: url,
+  ...(author ? { author: { '@type': 'Person', name: author } } : {}),
+  ...(cover ? { image: new URL(cover, Astro.site).href } : {}),
+  publisher: { '@type': 'Organization', name: 'Boardroom Governance Summit' },
+};
+---
+
+<BaseLayout title={title} description={excerpt} type="article" image={cover ?? undefined}>
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(articleSchema)} />
+
+  <article>
+    <header class="post-head">
+      <div class="container container--narrow">
+        <nav aria-label="Breadcrumb" class="post-crumbs">
+          <a href="/news/">News &amp; Insights</a>
+          <span aria-hidden="true">/</span>
+          <a href={`/news/?category=${encodeURIComponent(category)}`}>{category}</a>
+        </nav>
+        <h1>{title}</h1>
+        <p class="post-meta">
+          {author && <span>{author}</span>}
+          {author && <span aria-hidden="true">·</span>}
+          <time datetime={date.toISOString()}>{formatDate(date)}</time>
+          <span aria-hidden="true">·</span>
+          <span>{minutes} min read</span>
+        </p>
+      </div>
+    </header>
+
+    {
+      cover && (
+        <div class="post-cover">
+          <div class="container">
+            <img
+              src={imageUrl(cover, 1600)}
+              srcset={imageSrcset(cover, [800, 1200, 1600, 2000])}
+              sizes="(min-width: 1300px) 1240px, 95vw"
+              alt={coverAlt}
+              decoding="async"
+              fetchpriority="high"
+              data-cover
+            />
+          </div>
+        </div>
+      )
+    }
+
+    <div class="container container--narrow post-body">
+      <aside class="share" aria-label="Share this article">
+        <span class="mono">Share</span>
+        {
+          share.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener" aria-label={`Share on ${s.label}`}>
+              <Icon name={s.icon} size={18} />
+            </a>
+          ))
+        }
+        <button type="button" data-copy={url} aria-label="Copy link">
+          <Icon name="link" size={18} />
+        </button>
+      </aside>
+      <div class="prose" set:html={html} />
+    </div>
+
+    <nav class="container container--narrow pager" aria-label="More posts">
+      {
+        older ? (
+          <a href={articleUrl(older)} class="pager__link">
+            <span class="mono">Previous</span>
+            <span>{older.title}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        newer && (
+          <a href={articleUrl(newer)} class="pager__link pager__link--next">
+            <span class="mono">Next</span>
+            <span>{newer.title}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="related-head">
+        <h2>More from BGS</h2>
+        <a class="link-arrow" href="/news/">All news &amp; insights <Icon name="arrow-right" /></a>
+      </div>
+      <div class="grid grid--3">
+        {related.map((p) => <NewsCard post={p} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="post-cta">
+    <div class="container post-cta__inner">
+      <p class="eyebrow eyebrow--gold">BGS {nextEdition.year}</p>
+      <h2>Join the conversation in the room.</h2>
+      <a class="btn" href={nextEdition.href}>{nextEdition.ctaLabel} <Icon name="arrow-right" /></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Portrait covers (posters, flyers) are shown whole instead of cropped.
+  const cover = document.querySelector<HTMLImageElement>('[data-cover]');
+  const fit = () => {
+    if (!cover) return;
+    if (cover.naturalHeight > cover.naturalWidth * 1.05) cover.classList.add('is-portrait');
+    else if (cover.naturalWidth < 1100) cover.classList.add('is-small');
+  };
+  if (cover?.complete) fit();
+  else cover?.addEventListener('load', fit);
+
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((b) =>
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.copy!);
+        b.classList.add('copied');
+        b.setAttribute('aria-label', 'Link copied');
+        setTimeout(() => b.classList.remove('copied'), 1600);
+      } catch {
+        /* clipboard unavailable */
+      }
+    }),
+  );
+</script>
+
+<style>
+  .post-head {
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem) clamp(2rem, 1.5rem + 2vw, 3rem);
+    background: var(--white);
+  }
+  .post-crumbs {
+    display: flex;
+    gap: 0.6rem;
+    margin-bottom: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .post-crumbs a {
+    text-decoration: none;
+  }
+  .post-crumbs a:hover {
+    color: var(--red);
+  }
+  .post-head h1 {
+    font-size: clamp(2rem, 1.3rem + 3vw, 3.6rem);
+    line-height: 1.06;
+    max-width: 24ch;
+  }
+  .post-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 1.5rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .post-cover img {
+    width: 100%;
+    max-height: 640px;
+    object-fit: cover;
+    border-radius: var(--radius);
+  }
+  .post-cover img:global(.is-small) {
+    width: auto;
+    max-width: min(820px, 100%);
+    margin-inline: auto;
+  }
+  .post-cover img:global(.is-portrait) {
+    width: auto;
+    max-width: min(560px, 100%);
+    max-height: none;
+    margin-inline: auto;
+    box-shadow: var(--shadow);
+  }
+  .post-body {
+    position: relative;
+    padding-block: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+  .share {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-bottom: 2rem;
+  }
+  .share .mono {
+    margin-right: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .share a,
+  .share button {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line-strong);
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--ink-2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .share a:hover,
+  .share button:hover {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: var(--white);
+  }
+  .share button:global(.copied) {
+    background: #11603a;
+    border-color: #11603a;
+    color: var(--white);
+  }
+  @media (min-width: 1240px) {
+    .share {
+      position: absolute;
+      left: -5.5rem;
+      top: clamp(2.5rem, 2rem + 2vw, 4rem);
+      flex-direction: column;
+      margin: 0;
+    }
+    .share .mono {
+      margin: 0 0 0.5rem;
+    }
+  }
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    padding-bottom: clamp(3rem, 2rem + 3vw, 5rem);
+  }
+  .pager__link {
+    display: grid;
+    gap: 0.4rem;
+    padding: 1.25rem 1.4rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    text-decoration: none;
+    font-weight: 600;
+    line-height: 1.35;
+    transition: border-color 0.15s;
+  }
+  .pager__link:hover {
+    border-color: var(--ink);
+  }
+  .pager__link .mono {
+    font-size: 0.72rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .pager__link--next {
+    text-align: right;
+  }
+  .related-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+  }
+  .related-head h2 {
+    font-size: var(--fs-h3);
+  }
+  .post-cta {
+    background: var(--navy-950);
+    color: var(--white);
+    padding-block: clamp(4rem, 3rem + 3vw, 6rem);
+    text-align: center;
+  }
+  .post-cta__inner {
+    display: grid;
+    gap: 1.4rem;
+    justify-items: center;
+  }
+</style>

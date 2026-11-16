@@ -1,0 +1,85 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import { contact } from '../data/site';
+
+export async function getStaticPaths() {
+  const docs = await getCollection('legal');
+  return docs.map((doc) => ({ params: { legal: doc.id }, props: { doc } }));
+}
+
+interface Props {
+  doc: CollectionEntry<'legal'>;
+}
+const { doc } = Astro.props;
+const { Content } = await render(doc);
+const others = (await getCollection('legal')).filter((d) => d.id !== doc.id);
+---
+
+<BaseLayout title={doc.data.title} description={`${doc.data.title} for the Boardroom Governance Summit website and events.`}>
+  <PageHero compact eyebrow="Legal" title={doc.data.title} crumbs={[{ label: doc.data.title }]} />
+  <section class="section">
+    <div class="container legal">
+      <div class="prose">
+        <Content />
+      </div>
+      <aside>
+        <p class="mono">Also see</p>
+        <ul>
+          {
+            others.map((o) => (
+              <li>
+                <a href={`/${o.id}/`}>{o.data.title}</a>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mono">Questions</p>
+        <p><a href={`mailto:${contact.email}`}>{contact.email}</a></p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .legal {
+    display: grid;
+    gap: 3rem;
+  }
+  @media (min-width: 1000px) {
+    .legal {
+      grid-template-columns: minmax(0, 760px) 240px;
+      justify-content: space-between;
+    }
+    aside {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+      align-self: start;
+    }
+  }
+  .prose :global(h2) {
+    font-size: 1.45rem;
+  }
+  aside {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    font-size: 0.95rem;
+  }
+  aside .mono {
+    margin-top: 1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  aside ul {
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+  }
+  aside a {
+    color: var(--navy-800);
+  }
+</style>

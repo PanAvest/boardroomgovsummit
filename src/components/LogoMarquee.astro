@@ -1,0 +1,89 @@
+---
+import { Image } from 'astro:assets';
+import { allPartners as partners } from '../data/site';
+
+interface Props {
+  label?: string;
+}
+const { label = 'Past and present collaborators, associates and sponsors' } = Astro.props;
+// Show organiser-first ordering but interleave groups so the strip looks varied
+const items = [...partners];
+---
+
+<section class="marquee-wrap" aria-label={label}>
+  <div class="container">
+    <p class="marquee-label">{label}</p>
+  </div>
+  <div class="marquee">
+    <ul class="marquee__track">
+      {
+        [...items, ...items].map((p, i) => (
+          <li aria-hidden={i >= items.length ? 'true' : undefined}>
+            <Image src={p.logo} alt={i >= items.length ? '' : p.name} height={80} densities={[1, 2]} loading="lazy" />
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>
+
+<style>
+  .marquee-wrap {
+    padding-block: 2.75rem 3.25rem;
+    background: var(--paper);
+    border-block: 1px solid var(--line);
+  }
+  .marquee-label {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 1.75rem;
+  }
+  .marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquee__track {
+    display: flex;
+    gap: 1rem;
+    width: max-content;
+    list-style: none;
+    animation: scroll 90s linear infinite;
+  }
+  .marquee:hover .marquee__track {
+    animation-play-state: paused;
+  }
+  .marquee__track li {
+    display: grid;
+    place-items: center;
+    width: 180px;
+    height: 104px;
+    padding: 1rem 1.4rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .marquee__track :global(img) {
+    max-width: 100%;
+    max-height: 64px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(calc(-50% - 0.5rem));
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: auto;
+    }
+    .marquee__track li[aria-hidden='true'] {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,319 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { programme2025, nextEdition } from '../data/site';
+import { programme2026, panels, ampm } from '../data/bgs2026';
+
+import heroImg from '../assets/images/brochure-2026/page-05.jpg';
+import ctaImg from '../assets/images/events/2024/bgs-2024-5.jpg';
+---
+
+<BaseLayout
+  title="Programme"
+  description="The programme of the Boardroom Governance Summit 2026: opening session, Chairman's rallying call, three committee panels and the delegates' open forum. The BGS 2027 programme will follow."
+>
+  <PageHero
+    compact
+    eyebrow="Programme"
+    title="One day. Three committee panels. An open forum that doesn't play it safe."
+    lead={`The programme of BGS 2026, Thursday 12 November at the Labadi Beach Hotel, Accra. The BGS ${nextEdition.year} programme will be published here once confirmed.`}
+    crumbs={[{ label: 'Programme' }]}
+    image={heroImg}
+    imageAlt="The programme page of the BGS 2026 brochure"
+  >
+    <div class="btn-row">
+      <a class="btn" href={nextEdition.href}>Get the {nextEdition.year} programme first <Icon name="arrow-right" /></a>
+      <a class="btn btn--ghost-light" href="/files/bgs-2026-brochure.pdf" download><Icon name="download" size={18} /> 2026 brochure</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">BGS 2026 · Thursday 12 November</p>
+          <h2>The programme of the day.</h2>
+        </div>
+        <p class="lead">Board Committees: From Oversight to Impact. Doors opened at 8.30 am.</p>
+      </div>
+
+      <div class="agenda" role="table" aria-label="BGS 2026 programme">
+        <div class="agenda__row agenda__row--head" role="row">
+          <span role="columnheader">Time</span>
+          <span role="columnheader">Session</span>
+          <span role="columnheader">With</span>
+        </div>
+        {
+          programme2026.map((s) => (
+            <div class:list={['agenda__row', { 'agenda__row--key': s.kind === 'Panel' }]} role="row">
+              <span role="cell" class="agenda__time">{ampm(s.time)}</span>
+              <span role="cell" class="agenda__title">
+                {s.kind && (
+                  <span class:list={['pill', { 'pill--red': s.kind === 'Keynote', 'pill--gold': s.kind === 'Panel' }]}>{s.kind}</span>
+                )}
+                <strong>{s.title}</strong>
+              </span>
+              <span role="cell" class="agenda__detail">{s.detail}</span>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">The three panels</p>
+        <h2>Each 60 minutes. Questions went to the delegates' open forum at 4.10 pm.</h2>
+      </div>
+      <div class="panels">
+        {
+          panels.map((p) => (
+            <article class="panel" style={`--p1:${p.colors[0]};--p2:${p.colors[1]}`} data-reveal>
+              <header class="panel__head">
+                <span class="mono">
+                  Panel {p.n} · {p.kicker}
+                </span>
+                <h3>{p.title}</h3>
+              </header>
+              <div class="panel__body">
+                <p class="panel__perspective">{p.perspective}</p>
+                <p>{p.intro}</p>
+                <ul class="panel__people">
+                  <li>
+                    <span class="mono">Moderator</span>
+                    {p.moderator.name}
+                  </li>
+                  {p.panelists.map((x) => (
+                    <li>
+                      <span class="mono">Panellist</span>
+                      {x.name}
+                    </li>
+                  ))}
+                </ul>
+                <details>
+                  <summary>Questions put to the panel</summary>
+                  <ol>
+                    {p.questions.map((q) => (
+                      <li>{q}</li>
+                    ))}
+                  </ol>
+                </details>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      <p class="center">
+        <a class="link-arrow" href="/past-speakers/#bgs-2026">Speaker and panellist profiles <Icon name="arrow-right" /></a>
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <details class="archive">
+        <summary>
+          <span>
+            <span class="eyebrow">Archive</span>
+            <strong>BGS 2025 programme · Daring to be Different, 14 October 2025</strong>
+          </span>
+          <Icon name="plus" size={20} />
+        </summary>
+        <div class="agenda agenda--small">
+          {
+            programme2025.map((s) => (
+              <div class="agenda__row">
+                <span class="agenda__time">{s.time}</span>
+                <span class="agenda__title">
+                  <strong>{s.title}</strong>
+                </span>
+                <span class="agenda__detail">{s.detail ?? ''}</span>
+              </div>
+            ))
+          }
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <CtaBand
+    image={ctaImg}
+    title={`The ${nextEdition.year} programme is being shaped now.`}
+    text="Register your interest to receive the theme, speakers and full programme as soon as they are confirmed."
+    secondary={{ label: 'Past speakers', href: '/past-speakers/' }}
+  />
+</BaseLayout>
+
+<style>
+  .agenda {
+    border-top: 2px solid var(--ink);
+  }
+  .agenda__row {
+    display: grid;
+    gap: 0.4rem 2rem;
+    padding: 1.2rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  @media (min-width: 820px) {
+    .agenda__row {
+      grid-template-columns: 120px 1.1fr 1fr;
+      align-items: baseline;
+    }
+  }
+  .agenda__row--head {
+    display: none;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding-block: 0.9rem;
+  }
+  @media (min-width: 820px) {
+    .agenda__row--head {
+      display: grid;
+    }
+  }
+  .agenda__time {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--navy-800);
+    font-weight: 500;
+  }
+  .agenda__title {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+    align-items: center;
+  }
+  .agenda__title strong {
+    font-family: var(--font-display);
+    font-size: 1.08rem;
+    font-weight: 650;
+    letter-spacing: -0.01em;
+    line-height: 1.3;
+  }
+  .agenda__row--key .agenda__title strong {
+    font-size: 1.22rem;
+  }
+  .agenda__detail {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .panels {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .panels {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .panel {
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .panel__head {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1.5rem;
+    background: linear-gradient(130deg, var(--p1), var(--p2));
+    color: var(--white);
+  }
+  .panel__head .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.85;
+  }
+  .panel__head h3 {
+    font-size: 1.3rem;
+    line-height: 1.2;
+  }
+  .panel__body {
+    display: grid;
+    gap: 1rem;
+    padding: 1.5rem;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+  }
+  .panel__perspective {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .panel__people {
+    list-style: none;
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+  .panel__people li {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    gap: 0.75rem;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .panel__people .mono {
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 400;
+    padding-top: 0.15rem;
+  }
+  .panel details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--navy-800);
+  }
+  .panel details ol {
+    margin-top: 0.75rem;
+    padding-left: 1.2rem;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .center {
+    margin-top: 2.5rem;
+    text-align: center;
+  }
+  .archive {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0 1.5rem;
+  }
+  .archive summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.4rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+  .archive summary::-webkit-details-marker {
+    display: none;
+  }
+  .archive summary > span {
+    display: grid;
+    gap: 0.4rem;
+  }
+  .archive summary strong {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+  }
+  .archive[open] summary :global(svg) {
+    transform: rotate(45deg);
+  }
+  .agenda--small {
+    margin-bottom: 1.5rem;
+  }
+</style>

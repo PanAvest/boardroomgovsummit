@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://boardroomgovsummit.com/sitemap-index.xml
+Sitemap: https://boardroomgovsummit.com/news-sitemap.xml

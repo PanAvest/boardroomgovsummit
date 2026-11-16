@@ -1,0 +1,299 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import LatestNews from '../components/LatestNews.astro';
+import CtaBand from '../components/CtaBand.astro';
+
+import portrait from '../assets/images/people/2026/boateng.png';
+import stage from '../assets/images/events/2026/bgs-2026-convener-address.jpg';
+import seated from '../assets/images/people/douglas-boateng-seated.jpg';
+
+
+const qualifications = [
+  { degree: 'Doctor of Engineering', school: 'University of Warwick, United Kingdom' },
+  { degree: 'Graduate Diploma in Company Direction', school: 'Institute of Directors, United Kingdom' },
+  { degree: 'MSc in Logistics in Manufacturing Systems', school: 'University of Central England (now Birmingham City University), United Kingdom' },
+  { degree: 'Postgraduate Degree in Transport Planning & Management', school: 'Cranfield University, United Kingdom' },
+];
+
+const awards = [
+  {
+    by: 'Chartered Institute of Purchasing and Supply',
+    title: 'Lifetime Achievers Awards',
+    text: 'A Life Time Achievers Award (2013) and a Platinum Life Time Global Achievers Award (2016) for outstanding global contribution to procurement, logistics and supply chain management.',
+  },
+  {
+    by: "South Africa and Africa's first in supply and value chain management",
+    title: 'Professor Extraordinaire',
+    text: "Africa's first ever appointed Professor Extraordinaire for supply and value chain management (SBL UNISA), recognising academic and industrial excellence and international leadership.",
+  },
+  {
+    by: 'Institute of Directors Southern Africa',
+    title: 'Wall of Fame Inductee (2008)',
+    text: 'Recognised for long-term contribution to international logistics and supply chain advancement.',
+  },
+];
+
+const credentials = [
+  'International Chartered Director (UK)',
+  'Chartered Engineer (UK)',
+  'Fellow, Institute of Directors (UK)',
+  'Fellow, Ghana Institution of Engineering',
+  'Professional Chairperson',
+  'Scriber, NyansaKasa (Words of Wisdom)',
+];
+
+const sectors =
+  'pharmaceuticals, healthcare, biotechnology, specialty chemicals, transport and logistics, state-owned enterprises, services, financial services, education, mining, petrochemicals, the public sector, NGOs, government departments, manufacturing, electronics, aviation, gas, and agriculture';
+---
+
+<BaseLayout
+  title="The Convener: Ing. Prof. Douglas Boateng"
+  description="Ing. Prof. Douglas Boateng, International Chartered Director, Chartered Engineer and Africa's first Professor Extraordinaire for supply and value chain management, founded and convenes the Boardroom Governance Summit."
+>
+  <PageHero
+    eyebrow="The Convener"
+    title="Ing. Prof. Douglas Boateng"
+    lead="Founder and Convener of the Boardroom Governance Summit. International Chartered Director, Chartered Engineer, and Africa's first appointed Professor Extraordinaire for supply and value chain management."
+    image={portrait}
+    imageAlt="Portrait of Ing. Prof. Douglas Boateng"
+    imageShape="circle"
+    crumbs={[{ label: 'About', href: '/about/' }, { label: 'The Convener' }]}
+  >
+    <ul class="creds">
+      {credentials.map((c) => <li>{c}</li>)}
+    </ul>
+  </PageHero>
+
+  <section class="section">
+    <div class="container split split--top">
+      <div class="stack" style="--stack:1.5rem">
+        <p class="eyebrow">Biography</p>
+        <h2>A global strategic thinker on governance and value chains.</h2>
+        <div class="media bio-img" data-reveal>
+          <Image src={stage} alt="Prof. Boateng delivering the convener's address at BGS 2026" widths={[500, 900]} sizes="(min-width: 900px) 45vw, 92vw" />
+        </div>
+      </div>
+      <div class="prose">
+        <p>
+          Professor Douglas Boateng, Africa's first ever appointed Professor Extraordinaire for supply and value chain
+          management (SBL UNISA), is an International Professional Chartered Director and an adjunct academic.
+        </p>
+        <p>
+          Independently recognised as one of the vertical-specific global strategic thinkers on procurement,
+          governance, logistics and industrial engineering in the context of supply and value chain management, he
+          continues to play leading academic and industrial roles in supply chain strategy development and
+          implementation, in Africa and around the world.
+        </p>
+        <p>
+          He has been an elected member of the UK's Institute of Directors for over 20 years, and continues to assist
+          organisations and CEOs with board-level, directional and governance matters. He has been publicly
+          acknowledged by leading institutions, including the Commonwealth Business Council, for his ongoing
+          contribution to international procurement, supply chain development and governance, and its link to
+          long-term socio-economic development.
+        </p>
+        <p>
+          He is the Scriber of <strong>NyansaKasa (Words of Wisdom)</strong>, a daily thought-leadership platform with
+          an annual global readership of over one million, and writes two widely followed weekly op-ed series:
+          <strong>The Inconvenient Truth</strong> and <strong>What Is Wrong With Us</strong>.
+        </p>
+        <blockquote>
+          <p>
+            <strong>Message from the Convener</strong>
+            This summit is designed to bring together seasoned leaders, emerging thinkers, regulators and professionals
+            committed to raising the bar of accountability and strategic leadership.
+          </p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Education</p>
+          <h2>Qualifications</h2>
+        </div>
+        <p class="lead">
+          An academic journey that began in the early '90s across some of the UK's top institutions, with a strong
+          foundation in transport, logistics, engineering and corporate governance.
+        </p>
+      </div>
+      <ul class="quals">
+        {
+          qualifications.map((q) => (
+            <li data-reveal>
+              <span class="quals__icon">
+                <Icon name="award" />
+              </span>
+              <h3>{q.degree}</h3>
+              <p>{q.school}</p>
+            </li>
+          ))
+        }
+      </ul>
+      <p class="sectors">
+        <span class="mono">Sectors</span>
+        He has been at the forefront of vertical-specific industrial development initiatives in {sectors}.
+      </p>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container split split--wide-right split--top">
+      <div class="stack" style="--stack:1.25rem">
+        <p class="eyebrow eyebrow--gold">Honouring excellence and impact</p>
+        <h2>Major awards and recognitions</h2>
+        <div class="media awards-img">
+          <Image src={seated} alt="Ing. Prof. Douglas Boateng" widths={[400, 700]} sizes="(min-width: 900px) 35vw, 92vw" />
+        </div>
+      </div>
+      <ol class="awards">
+        {
+          awards.map((a, i) => (
+            <li data-reveal>
+              <span class="mono">0{i + 1}</span>
+              <div>
+                <p class="awards__by">{a.by}</p>
+                <h3>{a.title}</h3>
+                <p>{a.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="related-head">
+        <div class="stack">
+          <p class="eyebrow">Writing</p>
+          <h2>Recent insights from the Convener.</h2>
+        </div>
+        <a class="btn btn--ghost" href="/news/?category=Insights">All insights <Icon name="arrow-right" /></a>
+      </div>
+      <LatestNews server:defer category="Insights">
+        <div slot="fallback" class="sk-cards" aria-hidden="true"><div><i></i><b></b><b></b></div><div><i></i><b></b><b></b></div><div><i></i><b></b><b></b></div></div>
+      </LatestNews>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Bring the Convener to your boardroom."
+    text="For masterclasses, board-level advisory and speaking requests, get in touch with the BGS team."
+    primary={{ label: 'Contact the team', href: '/contact/' }}
+    secondary={{ label: 'Browse the books', href: '/books/' }}
+  />
+</BaseLayout>
+
+<style>
+  .creds {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+  }
+  .creds li {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--line-dark);
+    border-radius: 999px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.82);
+  }
+  .bio-img {
+    aspect-ratio: 3 / 2;
+    margin-top: 2rem !important;
+  }
+  .quals {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+  }
+  @media (min-width: 720px) {
+    .quals {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .quals {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .quals li {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    padding: 1.75rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  .quals__icon {
+    color: var(--red);
+  }
+  .quals h3 {
+    font-size: 1.15rem;
+    line-height: 1.25;
+  }
+  .quals p {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .sectors {
+    margin-top: 2.5rem;
+    max-width: 80ch;
+    color: var(--ink-2);
+  }
+  .sectors .mono {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .awards-img {
+    aspect-ratio: 1;
+    max-width: 380px;
+    margin-top: 2rem !important;
+  }
+  .awards {
+    list-style: none;
+    border-top: 1px solid var(--line-dark);
+  }
+  .awards li {
+    display: grid;
+    grid-template-columns: 3rem 1fr;
+    gap: 1rem;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .awards .mono {
+    color: var(--gold);
+  }
+  .awards__by {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+  .awards h3 {
+    font-size: 1.6rem;
+    margin-bottom: 0.6rem;
+  }
+  .related-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+</style>
