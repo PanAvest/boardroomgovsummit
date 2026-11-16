@@ -35,6 +35,9 @@ const legacy = {
   '/2026/10': '/news/',
   '/2026/11': '/news/',
   '/comments/feed': '/feed/',
+  // Email and hosting logins used to live on the main domain (cPanel hosting)
+  '/webmail': 'https://webmail.boardroomgovsummit.com/',
+  '/cpanel': 'https://cpanel.boardroomgovsummit.com/',
   // Short addresses
   '/faqs': '/frequently-asked-questions-faqs/',
   '/summit-2027': '/registration/',
