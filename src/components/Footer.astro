@@ -5,7 +5,7 @@ import logoWhite from '../assets/images/brand/bgs-logo-white.png';
 import { footerNav, contact, socials, site } from '../data/site';
 
 const year = new Date().getFullYear();
-const dashboardUrl = import.meta.env.PUBLIC_DASHBOARD_URL as string | undefined;
+const dashboardUrl = (import.meta.env.PUBLIC_DASHBOARD_URL as string | undefined) || 'https://bgs-dashboard-kappa.vercel.app';
 const socialIcon = (label: string) =>
   label.startsWith('LinkedIn') ? 'linkedin' : label.startsWith('X') ? 'x' : label.startsWith('Facebook') ? 'facebook' : 'instagram';
 ---

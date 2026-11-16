@@ -13,6 +13,7 @@ import VideoEmbed from '../components/VideoEmbed.astro';
 import CtaBand from '../components/CtaBand.astro';
 import { chairman, guestsOfHonour } from '../data/bgs2026';
 import { stats, faqGroups, nextEdition, contact } from '../data/site';
+import heroShots from '../data/gallery-2026.json';
 
 import heroImg from '../assets/images/events/2026/bgs-2026-convener-address.jpg';
 import wordmark2026 from '../assets/images/brand/bgs-2026-wordmark.png';
@@ -31,6 +32,7 @@ const faces = [chairman, ...guestsOfHonour.slice(0, 7)].map((p, i) => ({
   badge: i === 0 ? 'Chairman of the Summit' : undefined,
   tone: (['red', 'navy', 'ink', 'gold'] as const)[i % 4],
 }));
+const slides = [150, 175, 125, 350, 430, 100].map((i) => `/gallery/2026/full/${heroShots[i].name}.webp`);
 const faqs = faqGroups.flatMap((g) => g.items).slice(0, 4);
 
 const takeaways = [
@@ -74,15 +76,17 @@ const takeaways = [
       </div>
 
       <div class="hero__media">
-        <div class="hero__frame">
+        <div class="hero__frame" data-hero-slides={JSON.stringify(slides)}>
           <Image
             src={heroImg}
-            alt="Ing. Prof. Douglas Boateng addressing delegates at the Boardroom Governance Summit 2026"
+            alt="Moments from the Boardroom Governance Summit 2026"
             widths={[500, 800, 1100]}
             sizes="(min-width: 1000px) 42vw, 92vw"
             loading="eager"
             fetchpriority="high"
+            class="hero__slide is-active"
           />
+          <div class="hero__bars" aria-hidden="true"></div>
         </div>
         <div class="hero__card">
           <Image src={wordmark2026} alt="Boardroom Governance Summit 2026" width={220} densities={[1, 2]} />
@@ -92,6 +96,54 @@ const takeaways = [
       </div>
     </div>
   </section>
+
+  <script>
+    // Hero slideshow: a new BGS 2026 photo every 4 seconds
+    const frame = document.querySelector<HTMLElement>('[data-hero-slides]');
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (frame && !reduce) {
+      const urls: string[] = JSON.parse(frame.dataset.heroSlides!);
+      const bars = frame.querySelector<HTMLElement>('.hero__bars')!;
+      const slides: HTMLImageElement[] = [frame.querySelector<HTMLImageElement>('.hero__slide')!];
+      for (const url of urls) {
+        const img = new Image();
+        img.className = 'hero__slide';
+        img.alt = '';
+        img.decoding = 'async';
+        img.dataset.src = url;
+        frame.insertBefore(img, bars);
+        slides.push(img);
+      }
+      slides.forEach(() => bars.append(document.createElement('i')));
+      const marks = [...bars.children] as HTMLElement[];
+      const load = (img: HTMLImageElement) => {
+        if (img.dataset.src) {
+          img.src = img.dataset.src;
+          delete img.dataset.src;
+        }
+        const ready = img.decode ? img.decode().catch(() => {}) : Promise.resolve();
+        // never let a slow photo stall the rotation
+        return Promise.race([ready, new Promise((r) => setTimeout(r, 1200))]);
+      };
+      let i = 0;
+      marks[0].classList.add('is-on');
+      load(slides[1]);
+      const next = async () => {
+        if (document.hidden) return;
+        const n = (i + 1) % slides.length;
+        await load(slides[n]);
+        slides[i].classList.replace('is-active', 'is-leaving');
+        const old = slides[i];
+        setTimeout(() => old.classList.remove('is-leaving'), 1400);
+        slides[n].classList.add('is-active');
+        marks[i].classList.remove('is-on');
+        marks[n].classList.add('is-on');
+        i = n;
+        load(slides[(i + 1) % slides.length]);
+      };
+      setInterval(next, 4000);
+    }
+  </script>
 
   <ThankYouBanner />
 
@@ -474,14 +526,72 @@ const takeaways = [
     overflow: hidden;
     border-radius: 999px 999px var(--radius) var(--radius);
   }
-  .hero__frame :global(img) {
+  .hero__frame {
+    position: relative;
+    isolation: isolate;
+    background: var(--navy-850);
+  }
+  .hero__frame :global(.hero__slide) {
+    position: absolute;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: 58% center;
+    opacity: 0;
+    clip-path: inset(100% 0 0 0);
+    transform: scale(1.18);
+  }
+  .hero__frame :global(.hero__slide.is-active) {
+    z-index: 2;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: scale(1.04);
+    transition:
+      clip-path 1.2s cubic-bezier(0.7, 0, 0.2, 1),
+      transform 5.2s cubic-bezier(0.2, 0.6, 0.2, 1);
+  }
+  .hero__frame :global(.hero__slide.is-leaving) {
+    z-index: 1;
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: scale(1.1) translateY(-3%);
+    filter: brightness(0.6);
+    transition:
+      transform 1.4s cubic-bezier(0.7, 0, 0.2, 1),
+      filter 1.4s;
+  }
+  .hero__bars {
+    position: absolute;
+    z-index: 3;
+    top: 22%;
+    right: 0.9rem;
+    display: grid;
+    gap: 6px;
+  }
+  .hero__bars :global(i) {
+    width: 4px;
+    height: 22px;
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    overflow: hidden;
+    position: relative;
+  }
+  .hero__bars :global(i)::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  .hero__bars :global(i.is-on)::after {
+    transform: scaleY(1);
+    transition: transform 4s linear;
   }
   .hero__card {
     position: absolute;
+    z-index: 4;
     left: -1.5rem;
     bottom: 2rem;
     display: grid;
