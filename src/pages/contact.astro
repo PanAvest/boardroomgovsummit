@@ -1,0 +1,223 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { contact, socials } from '../data/site';
+import venueImg from '../assets/images/events/2024/bgs-2024-23.jpg';
+
+const channels = [
+  { icon: 'phone', label: 'Call us', value: contact.phone, href: contact.phoneHref },
+  { icon: 'whatsapp', label: 'WhatsApp us', value: contact.whatsapp, href: contact.whatsappHref, external: true },
+  { icon: 'mail', label: 'Send an email', value: contact.email, href: `mailto:${contact.email}` },
+  { icon: 'users', label: 'Partnerships', value: contact.partnershipEmail, href: `mailto:${contact.partnershipEmail}` },
+] as const;
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with the Boardroom Governance Summit team about registration, partnerships, media enquiries or general information."
+>
+  <PageHero
+    compact
+    eyebrow="Get in touch"
+    title="Ready to connect with the BGS team?"
+    lead="Whether you're interested in registration, partnerships, media enquiries or general information, we're here to help. Let's shape stronger boardrooms together."
+    crumbs={[{ label: 'Contact' }]}
+  />
+
+  <section class="section">
+    <div class="container">
+      <ul class="channels">
+        {
+          channels.map((c) => (
+            <li>
+              <a href={c.href} target={'external' in c ? '_blank' : undefined} rel={'external' in c ? 'noopener' : undefined}>
+                <span class="channels__icon">
+                  <Icon name={c.icon} />
+                </span>
+                <span class="mono">{c.label}</span>
+                <strong>{c.value}</strong>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="contact">
+        <div class="card contact__form">
+          <h2>Send us a message</h2>
+          <form class="form" data-bgs-form="Website enquiry">
+            <div class="form-row">
+              <div class="field">
+                <label for="c-name">Full name <span class="req">*</span></label>
+                <input class="input" id="c-name" name="name" data-label="Name" required autocomplete="name" />
+              </div>
+              <div class="field">
+                <label for="c-email">Email <span class="req">*</span></label>
+                <input class="input" id="c-email" name="email" type="email" data-label="Email" required autocomplete="email" />
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="c-phone">Phone</label>
+                <input class="input" id="c-phone" name="phone" type="tel" data-label="Phone" autocomplete="tel" />
+              </div>
+              <div class="field">
+                <label for="c-topic">Topic</label>
+                <select class="select" id="c-topic" name="topic" data-label="Topic">
+                  <option>General enquiry</option>
+                  <option>BGS 2027 registration</option>
+                  <option>Sponsorship and partnerships</option>
+                  <option>Speaking</option>
+                  <option>Media</option>
+                  <option>Certified Board Governance Course</option>
+                  <option>Books</option>
+                </select>
+              </div>
+            </div>
+            <div class="field">
+              <label for="c-msg">Message <span class="req">*</span></label>
+              <textarea class="textarea" id="c-msg" name="message" data-label="Message" required></textarea>
+            </div>
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" />
+            <button type="submit" class="btn">Send message <Icon name="arrow-right" /></button>
+            <p class="form-status" role="status" tabindex="-1"></p>
+          </form>
+        </div>
+
+        <aside class="contact__aside">
+          <div class="media venue">
+            <Image src={venueImg} alt="The summit entrance at the Labadi Beach Hotel" widths={[400, 700]} sizes="(min-width: 1000px) 35vw, 92vw" />
+          </div>
+          <div class="stack" style="--stack:0.75rem">
+            <p class="eyebrow">Summit venue</p>
+            <h3>Labadi Beach Hotel, Accra</h3>
+            <p class="muted">Home of every edition of the Boardroom Governance Summit.</p>
+            <a class="link-arrow" href={contact.mapsHref} target="_blank" rel="noopener">Open in Maps <Icon name="arrow-up-right" /></a>
+          </div>
+          <div class="stack" style="--stack:0.75rem">
+            <p class="eyebrow">Follow BGS</p>
+            <ul class="socials">
+              {
+                socials.map((s) => (
+                  <li>
+                    <a href={s.href} target="_blank" rel="noopener">
+                      {s.label} <Icon name="arrow-up-right" size={14} />
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .channels {
+    list-style: none;
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 4rem;
+  }
+  @media (min-width: 640px) {
+    .channels {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .channels {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .channels a {
+    display: grid;
+    gap: 0.45rem;
+    height: 100%;
+    padding: 1.6rem;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    text-decoration: none;
+    transition:
+      border-color 0.2s,
+      background-color 0.2s;
+  }
+  .channels a:hover {
+    border-color: var(--navy-900);
+    background: var(--paper);
+  }
+  .channels__icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    margin-bottom: 0.75rem;
+    border-radius: 12px;
+    background: var(--red);
+    color: var(--white);
+  }
+  .channels .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .channels strong {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    letter-spacing: -0.01em;
+    overflow-wrap: anywhere;
+  }
+  .contact {
+    display: grid;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .contact {
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 4rem;
+    }
+  }
+  .contact__form {
+    display: grid;
+    gap: 1.5rem;
+    box-shadow: var(--shadow);
+  }
+  .contact__form h2 {
+    font-size: var(--fs-h3);
+  }
+  .contact__form .btn {
+    justify-self: start;
+  }
+  .contact__aside {
+    display: grid;
+    gap: 2.25rem;
+  }
+  .venue {
+    aspect-ratio: 4 / 3;
+  }
+  .contact__aside h3 {
+    font-size: 1.4rem;
+  }
+  .socials {
+    list-style: none;
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+  .socials a {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  .socials a:hover {
+    color: var(--red);
+  }
+</style>

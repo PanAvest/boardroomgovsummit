@@ -1,0 +1,50 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { nextEdition, contact } from '../data/site';
+import poster from '../assets/images/promo/bgs-2026-poster.jpg';
+---
+
+<BaseLayout title="Tickets" description={`Ticket sales for BGS 2026 have closed. Register your interest for BGS ${nextEdition.year} to be first in line for passes.`}>
+  <PageHero
+    compact
+    eyebrow="Tickets"
+    title={`BGS 2026 tickets have closed. BGS ${nextEdition.year} is next.`}
+    lead={`Thank you to everyone who joined us on 12 November 2026. ${nextEdition.status}: register your interest and you'll get first access to ${nextEdition.year} passes.`}
+    image={poster}
+    imageAlt="BGS 2026 single ticket artwork"
+    crumbs={[{ label: 'Tickets' }]}
+  >
+    <div class="btn-row">
+      <a class="btn" href={nextEdition.href}>{nextEdition.ctaLabel} <Icon name="arrow-right" /></a>
+      <a class="btn btn--ghost-light" href="/sponsorship/">Group and corporate packages</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container container--narrow tk">
+      <h2>Already bought a BGS 2026 ticket?</h2>
+      <p class="lead">
+        Your certificate of attendance and course details are sent to the email you registered with. For anything
+        else about your ticket, contact us on <a href={`mailto:${contact.email}`}>{contact.email}</a> or
+        <a href={contact.phoneHref}>{contact.phone}</a>.
+      </p>
+      <a class="link-arrow" href="/refund-policy/">Refund and transfer policy <Icon name="arrow-right" /></a>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .tk {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+  }
+  .tk h2 {
+    font-size: var(--fs-h3);
+  }
+  .tk a:not(.link-arrow) {
+    color: var(--navy-800);
+  }
+</style>

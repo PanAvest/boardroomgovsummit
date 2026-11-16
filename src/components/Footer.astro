@@ -1,0 +1,243 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import logoWhite from '../assets/images/brand/bgs-logo-white.png';
+import { footerNav, contact, socials, site } from '../data/site';
+
+const year = new Date().getFullYear();
+const dashboardUrl = import.meta.env.PUBLIC_DASHBOARD_URL as string | undefined;
+const socialIcon = (label: string) =>
+  label.startsWith('LinkedIn') ? 'linkedin' : label.startsWith('X') ? 'x' : label.startsWith('Facebook') ? 'facebook' : 'instagram';
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__signup">
+        <p class="eyebrow eyebrow--gold">Newsletter</p>
+        <h2>Stay at the forefront of boardroom governance in Africa.</h2>
+        <p class="footer__signup-copy">
+          Summit announcements, new thinking from the convener, and first notice of BGS 2027. No noise.
+        </p>
+        <form class="footer__form" data-bgs-form="Newsletter sign-up" data-success="You're on the list. Thank you.">
+          <label class="sr-only" for="footer-email">Email address</label>
+          <input
+            id="footer-email"
+            class="input"
+            type="email"
+            name="email"
+            data-label="Email"
+            placeholder="Your work email"
+            required
+            autocomplete="email"
+          />
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" />
+          <button type="submit" class="btn">Subscribe</button>
+          <p class="form-status" role="status" tabindex="-1"></p>
+        </form>
+      </div>
+
+      <div class="footer__cols">
+        {
+          footerNav.map((col) => (
+            <div>
+              <p class="footer__col-title">{col.title}</p>
+              <ul>
+                {col.links.map((l) => (
+                  <li>
+                    <a href={l.href}>{l.label}</a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+        <div>
+          <p class="footer__col-title">Contact</p>
+          <ul class="footer__contact">
+            <li>
+              <a href={`mailto:${contact.email}`}><Icon name="mail" size={16} />{contact.email}</a>
+            </li>
+            <li>
+              <a href={contact.phoneHref}><Icon name="phone" size={16} />{contact.phone}</a>
+            </li>
+            <li>
+              <a href={contact.whatsappHref} rel="noopener" target="_blank"
+                ><Icon name="whatsapp" size={16} />WhatsApp {contact.whatsapp}</a
+              >
+            </li>
+          </ul>
+          <ul class="footer__social" aria-label="Social media">
+            {
+              socials.map((s) => (
+                <li>
+                  <a href={s.href} target="_blank" rel="noopener" aria-label={s.label}>
+                    <Icon name={socialIcon(s.label)} size={18} />
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer__statement">
+      <Image src={logoWhite} alt="Boardroom Governance Summit" width={260} densities={[1, 2]} />
+      <p class="footer__big">Shaping accountability in the&nbsp;boardrooms.</p>
+    </div>
+
+    <div class="footer__bottom">
+      <p>
+        © {year} Boardroom Governance Summit. Organised by {site.organiser}.
+      </p>
+      <ul>
+        <li><a href="/privacy-policy/">Privacy</a></li>
+        <li><a href="/terms-of-service/">Terms</a></li>
+        <li><a href="/refund-policy/">Refunds</a></li>
+        {dashboardUrl && <li><a href={dashboardUrl} rel="nofollow">Team login</a></li>}
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--navy-950);
+    color: rgba(255, 255, 255, 0.78);
+    padding-top: clamp(4rem, 3rem + 4vw, 6.5rem);
+  }
+  .footer__top {
+    display: grid;
+    gap: 3.5rem;
+    padding-bottom: 4rem;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  @media (min-width: 1100px) {
+    .footer__top {
+      grid-template-columns: 0.72fr 1.28fr;
+      gap: 4rem;
+    }
+  }
+  .footer__signup h2 {
+    margin-top: 1rem;
+    color: var(--white);
+    font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.5rem);
+    max-width: 16ch;
+  }
+  .footer__signup-copy {
+    margin-top: 1rem;
+    max-width: 44ch;
+  }
+  .footer__form {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0.6rem;
+    margin-top: 1.75rem;
+    max-width: 480px;
+  }
+  .footer__form .input {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--line-dark);
+    color: var(--white);
+    border-radius: 999px;
+    padding-inline: 1.25rem;
+  }
+  .footer__form .input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .footer__form .form-status {
+    grid-column: 1 / -1;
+  }
+  .footer__cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2.5rem 2rem;
+  }
+  @media (min-width: 720px) {
+    .footer__cols {
+      grid-template-columns: repeat(3, minmax(0, 1fr)) minmax(0, 1.55fr);
+    }
+  }
+  .footer__col-title {
+    margin-bottom: 1rem;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .footer ul {
+    list-style: none;
+    display: grid;
+    gap: 0.65rem;
+    font-size: 0.93rem;
+  }
+  .footer a {
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+  .footer a:hover {
+    color: var(--gold);
+  }
+  .footer__contact a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: 0.86rem;
+    overflow-wrap: anywhere;
+  }
+  .footer__contact :global(svg) {
+    flex: none;
+    opacity: 0.6;
+  }
+  .footer__social {
+    display: flex !important;
+    gap: 0.5rem !important;
+    margin-top: 1.5rem;
+  }
+  .footer__social a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border: 1px solid var(--line-dark);
+    border-radius: 50%;
+  }
+  .footer__social a:hover {
+    border-color: var(--gold);
+  }
+  .footer__statement {
+    display: grid;
+    gap: 2rem;
+    padding-block: clamp(3rem, 2rem + 4vw, 5.5rem);
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .footer__statement img {
+    width: 200px;
+    height: auto;
+    opacity: 0.9;
+  }
+  .footer__big {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 1rem + 5.6vw, 6.2rem);
+    font-weight: 750;
+    line-height: 0.98;
+    letter-spacing: -0.05em;
+    color: var(--white);
+    max-width: 14ch;
+  }
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 1.75rem 2.25rem;
+    font-size: 0.82rem;
+    color: rgba(255, 255, 255, 0.55);
+  }
+  .footer__bottom ul {
+    display: flex;
+    gap: 1.5rem;
+  }
+</style>

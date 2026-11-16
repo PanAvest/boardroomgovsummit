@@ -1,0 +1,267 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { sponsorshipTiers, contact, nextEdition } from '../data/site';
+
+import heroImg from '../assets/images/events/2025/bgs-2025-325-of-465.jpg';
+import ctaImg from '../assets/images/events/2025/bgs-2025-1-of-1.jpg';
+
+const why = [
+  { icon: 'users', title: 'The room that decides', text: '1,000+ board chairpersons, directors, CEOs, regulators and policymakers, in one place for one day.' },
+  { icon: 'mic', title: 'A platform, not a banner', text: 'Address delegates, join governance panels and contribute to summit publications and reports.' },
+  { icon: 'network', title: 'National reach', text: 'Television, radio, print, digital and livestream branding, plus features in BoardroomTimes.' },
+  { icon: 'book', title: 'Lasting legacy', text: 'Book donations to the African Conscientisation Library Project and governance masterclasses.' },
+] as const;
+---
+
+<BaseLayout
+  title="Sponsorship"
+  description="Partner with the Boardroom Governance Summit. Sponsorship packages from Platinum to Bronze, with delegate passes, branding, speaking opportunities and governance education."
+>
+  <PageHero
+    eyebrow="Be a sponsor"
+    title="Stand with better governance in Africa."
+    lead="Sponsors put their name behind accountable leadership, and their people in the room where Ghana's boardroom agenda is set."
+    image={heroImg}
+    imageAlt="Guests and partners at BGS 2025"
+    crumbs={[{ label: 'Partners', href: '/partners/' }, { label: 'Sponsorship' }]}
+  >
+    <div class="btn-row">
+      <a class="btn" href="#packages">See the packages <Icon name="arrow-right" /></a>
+      <a class="btn btn--ghost-light" href={`mailto:${contact.partnershipEmail}`}>Talk to partnerships</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Why sponsor BGS</p>
+          <h2>Visibility with substance.</h2>
+        </div>
+        <p class="lead">Every package is designed to build institutional governance and CSR positioning, not just logo count.</p>
+      </div>
+      <div class="grid grid--4">
+        {
+          why.map((w) => (
+            <div class="why" data-reveal>
+              <span class="why__icon">
+                <Icon name={w.icon} />
+              </span>
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper" id="packages">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Sponsorship packages</p>
+          <h2>Five ways to partner.</h2>
+        </div>
+        <p class="lead">
+          Packages and prices below are from BGS 2026. {nextEdition.year} packages will be confirmed shortly. Talk to us
+          now to secure first right of placement.
+        </p>
+      </div>
+
+      <div class="tiers">
+        {
+          sponsorshipTiers.map((t, i) => (
+            <article class:list={['tier', { 'tier--top': i === 0 }]} style={`--accent:${t.accent}`} data-reveal>
+              <header class="tier__head">
+                <p class="tier__name">{t.name}</p>
+                <p class="tier__price">{t.price}</p>
+                <p class="tier__headline">{t.headline}</p>
+              </header>
+              <ul class="tier__list">
+                {t.benefits.slice(0, 6).map((b) => (
+                  <li>{b}</li>
+                ))}
+              </ul>
+              {t.benefits.length > 6 && (
+                <details class="tier__more">
+                  <summary>
+                    <span class="more-closed">All {t.benefits.length} benefits</span>
+                    <span class="more-open">Show fewer</span>
+                    <Icon name="chevron-down" size={16} />
+                  </summary>
+                  <ul class="tier__list">
+                    {t.benefits.slice(6).map((b) => (
+                      <li>{b}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+              <a class="btn btn--sm tier__cta" href={`/registration/?interest=sponsor`}>
+                Enquire about {t.name}
+              </a>
+            </article>
+          ))
+        }
+      </div>
+      <p class="tiers__note">
+        Prices in Ghana cedis. Bespoke and in-kind partnerships are also welcome: email
+        <a href={`mailto:${contact.partnershipEmail}`}>{contact.partnershipEmail}</a>.
+      </p>
+    </div>
+  </section>
+
+  <LogoMarquee label="Organisations that have partnered with BGS" />
+
+  <CtaBand
+    image={ctaImg}
+    title="Let's build the next summit together."
+    text={`Secure your place as a BGS ${nextEdition.year} partner before packages are released publicly.`}
+    primary={{ label: 'Enquire about sponsorship', href: '/registration/?interest=sponsor' }}
+    secondary={{ label: 'Call the team', href: contact.phoneHref }}
+  />
+</BaseLayout>
+
+<style>
+  .why {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+    padding-top: 1.5rem;
+    border-top: 2px solid var(--ink);
+  }
+  .why__icon {
+    color: var(--red);
+  }
+  .why h3 {
+    font-size: 1.25rem;
+  }
+  .why p {
+    color: var(--muted);
+  }
+  .tiers {
+    display: grid;
+    gap: 1.25rem;
+    align-items: start;
+  }
+  @media (min-width: 720px) {
+    .tiers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .tiers {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .tier {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding: 1.75rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-top: 5px solid var(--accent);
+    border-radius: var(--radius);
+  }
+  .tier--top {
+    background: var(--navy-950);
+    color: var(--white);
+    border-color: var(--navy-950);
+    border-top-color: var(--accent);
+  }
+  .tier__name {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    font-weight: 500;
+  }
+  .tier__price {
+    margin-top: 0.4rem;
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+  }
+  .tier__headline {
+    margin-top: 0.4rem;
+    color: var(--muted);
+  }
+  .tier--top .tier__headline {
+    color: rgba(255, 255, 255, 0.72);
+  }
+  .tier__list {
+    list-style: none;
+    display: grid;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .tier--top .tier__list {
+    border-color: var(--line-dark);
+  }
+  .tier__list li {
+    position: relative;
+    padding-left: 1.4rem;
+  }
+  .tier__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.55em;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    background: var(--accent);
+  }
+  .tier__more summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    list-style: none;
+  }
+  .tier__more summary::-webkit-details-marker {
+    display: none;
+  }
+  .tier__more .more-open,
+  .tier__more[open] .more-closed {
+    display: none;
+  }
+  .tier__more[open] .more-open {
+    display: inline;
+  }
+  .tier__more[open] summary :global(svg) {
+    transform: rotate(180deg);
+  }
+  .tier__more .tier__list {
+    margin-top: 0.8rem;
+    border-top: 0;
+    padding-top: 0;
+  }
+  .tier__cta {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+  .tier:not(.tier--top) .tier__cta {
+    --btn-bg: var(--navy-900);
+  }
+  .tiers__note {
+    margin-top: 2rem;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .tiers__note a {
+    color: var(--navy-800);
+  }
+</style>

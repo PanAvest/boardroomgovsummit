@@ -1,0 +1,177 @@
+[
+ {
+  "name": "TV3",
+  "group": "media",
+  "file": "tv3.png"
+ },
+ {
+  "name": "YFM Ghana",
+  "group": "media",
+  "file": "yfm-ghana.png"
+ },
+ {
+  "name": "Happy 98.9 FM",
+  "group": "media",
+  "file": "happy-98-9-fm.png"
+ },
+ {
+  "name": "GHOne TV",
+  "group": "media",
+  "file": "ghone-tv.png"
+ },
+ {
+  "name": "Business24",
+  "group": "media",
+  "file": "business24.png"
+ },
+ {
+  "name": "Investment Times",
+  "group": "media",
+  "file": "investment-times.png"
+ },
+ {
+  "name": "Ministry of Energy and Green Transition",
+  "group": "stakeholder",
+  "file": "ministry-of-energy-and-green-transition.png"
+ },
+ {
+  "name": "Volta River Authority",
+  "group": "stakeholder",
+  "file": "volta-river-authority.png"
+ },
+ {
+  "name": "Ghana Bar Association",
+  "group": "stakeholder",
+  "file": "ghana-bar-association.png"
+ },
+ {
+  "name": "Institute of Chartered Accountants, Ghana",
+  "group": "stakeholder",
+  "file": "institute-of-chartered-accountants-ghana.png"
+ },
+ {
+  "name": "Ghana Institution of Engineering",
+  "group": "stakeholder",
+  "file": "ghana-institution-of-engineering.png"
+ },
+ {
+  "name": "Labadi Beach Hotel",
+  "group": "stakeholder",
+  "file": "labadi-beach-hotel.png"
+ },
+ {
+  "name": "Ghana National Chamber of Commerce & Industry",
+  "group": "stakeholder",
+  "file": "ghana-national-chamber-of-commerce-industry.png"
+ },
+ {
+  "name": "PanAvest International & Partners",
+  "group": "stakeholder",
+  "file": "panavest-international-partners.png"
+ },
+ {
+  "name": "Ghana Chamber of Bulk Oil Distributors",
+  "group": "stakeholder",
+  "file": "ghana-chamber-of-bulk-oil-distributors.png"
+ },
+ {
+  "name": "Sustainable Development Goals",
+  "group": "stakeholder",
+  "file": "sustainable-development-goals.png"
+ },
+ {
+  "name": "Ghana Institute of Procurement and Supply",
+  "group": "stakeholder",
+  "file": "ghana-institute-of-procurement-and-supply.png"
+ },
+ {
+  "name": "State Interests and Governance Authority",
+  "group": "stakeholder",
+  "file": "state-interests-and-governance-authority.png"
+ },
+ {
+  "name": "The Bank Hospital",
+  "group": "stakeholder",
+  "file": "the-bank-hospital.png"
+ },
+ {
+  "name": "Ghana Institution of Surveyors",
+  "group": "stakeholder",
+  "file": "ghana-institution-of-surveyors.png"
+ },
+ {
+  "name": "Institute of Directors-Ghana",
+  "group": "stakeholder",
+  "file": "institute-of-directors-ghana.png"
+ },
+ {
+  "name": "African Supply Chain Confederation (ASCON)",
+  "group": "stakeholder",
+  "file": "african-supply-chain-confederation-ascon.png"
+ },
+ {
+  "name": "African Corporate Governance Network",
+  "group": "stakeholder",
+  "file": "african-corporate-governance-network.png"
+ },
+ {
+  "name": "Chartered Institute of Logistics and Transport",
+  "group": "stakeholder",
+  "file": "chartered-institute-of-logistics-and-transport.png"
+ },
+ {
+  "name": "African Continental Free Trade Area",
+  "group": "stakeholder",
+  "file": "african-continental-free-trade-area.png"
+ },
+ {
+  "name": "Chartered Institute of Directors Nigeria",
+  "group": "stakeholder",
+  "file": "chartered-institute-of-directors-nigeria.png"
+ },
+ {
+  "name": "Ghana South Africa Business Chamber",
+  "group": "stakeholder",
+  "file": "ghana-south-africa-business-chamber.png"
+ },
+ {
+  "name": "African Union",
+  "group": "stakeholder",
+  "file": "african-union.png"
+ },
+ {
+  "name": "Vice-Chancellors Ghana",
+  "group": "stakeholder",
+  "file": "vice-chancellors-ghana.png"
+ },
+ {
+  "name": "Federation of Associations of Ghanaian Exporters",
+  "group": "stakeholder",
+  "file": "federation-of-associations-of-ghanaian-exporters.png"
+ },
+ {
+  "name": "Association of Ghana Industries",
+  "group": "stakeholder",
+  "file": "association-of-ghana-industries.png"
+ },
+ {
+  "name": "UK-Ghana Chamber of Commerce",
+  "group": "stakeholder",
+  "file": "uk-ghana-chamber-of-commerce.png"
+ },
+ {
+  "name": "Agenda 2063",
+  "group": "stakeholder",
+  "file": "agenda-2063.png"
+ },
+ {
+  "name": "Public Procurement Authority",
+  "group": "stakeholder",
+  "file": "public-procurement-authority.png"
+ },
+ {
+  "name": "Nvame",
+  "group": "stakeholder",
+  "file": "nvame.png"
+ }
+]

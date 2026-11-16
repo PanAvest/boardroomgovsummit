@@ -1,0 +1,233 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { nextEdition, contact } from '../data/site';
+import heroImg from '../assets/images/events/2026/bgs-2026-audience.jpg';
+
+const interests = [
+  { value: 'attend', label: 'Attend as a delegate' },
+  { value: 'group', label: 'Register a team' },
+  { value: 'sponsor', label: 'Sponsor or partner' },
+  { value: 'speak', label: 'Speak or nominate a speaker' },
+  { value: 'media', label: 'Media' },
+];
+
+const expect = [
+  { title: 'A seat in the room', text: '1,000+ chairpersons, directors, CEOs, regulators and policymakers.' },
+  { title: 'A book to keep', text: "A complimentary copy of Prof. Boateng's latest governance book." },
+  { title: 'CPD certificate', text: 'Official certificate of attendance for CPD points.' },
+  { title: 'The network', text: 'An ongoing local and continental network, newsletter and NyansaKasa.' },
+];
+---
+
+<BaseLayout
+  title={`Register interest for BGS ${nextEdition.year}`}
+  description={`Registration for BGS 2026 has closed. Register your interest for the Boardroom Governance Summit ${nextEdition.year} to hear first about dates, theme and speakers.`}
+>
+  <PageHero
+    compact
+    eyebrow={`BGS ${nextEdition.year}`}
+    title={`Be in the room for BGS ${nextEdition.year}.`}
+    lead={`BGS 2026 has concluded and registration is closed. ${nextEdition.status}. Leave your details and you'll be first to hear, with early access to delegate passes.`}
+    image={heroImg}
+    imageAlt="Delegates at BGS 2026"
+    crumbs={[{ label: 'Register interest' }]}
+  />
+
+  <section class="section">
+    <div class="container reg">
+      <div class="reg__form card">
+        <h2>Register your interest</h2>
+        <p class="muted">Takes under a minute. We'll only use your details to contact you about the summit.</p>
+
+        <form class="form" data-bgs-form={`BGS ${nextEdition.year} interest`} data-success="Thank you. You're on the list and will hear from us as soon as BGS 2027 details are confirmed.">
+          <fieldset class="field" style="border:0;padding:0;margin:0">
+            <legend>I'm interested in <span class="req">*</span></legend>
+            <div class="choice-group">
+              {
+                interests.map((it, i) => (
+                  <label class="choice">
+                    <input type="checkbox" name="interest" value={it.label} data-label="Interested in" data-key={it.value} checked={i === 0} />
+                    <span>{it.label}</span>
+                  </label>
+                ))
+              }
+            </div>
+          </fieldset>
+          <div class="form-row">
+            <div class="field">
+              <label for="r-name">Full name <span class="req">*</span></label>
+              <input class="input" id="r-name" name="name" data-label="Name" required autocomplete="name" />
+            </div>
+            <div class="field">
+              <label for="r-email">Email <span class="req">*</span></label>
+              <input class="input" id="r-email" name="email" type="email" data-label="Email" required autocomplete="email" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="r-phone">Phone / WhatsApp</label>
+              <input class="input" id="r-phone" name="phone" type="tel" data-label="Phone" autocomplete="tel" />
+            </div>
+            <div class="field">
+              <label for="r-org">Organisation</label>
+              <input class="input" id="r-org" name="organisation" data-label="Organisation" autocomplete="organization" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label for="r-role">Job title</label>
+              <input class="input" id="r-role" name="role" data-label="Job title" autocomplete="organization-title" />
+            </div>
+            <div class="field">
+              <label for="r-seats">Expected number of delegates</label>
+              <select class="select" id="r-seats" name="seats" data-label="Delegates">
+                <option>Just me</option>
+                <option>2–5</option>
+                <option>6–10</option>
+                <option>More than 10</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="r-msg">Anything we should know?</label>
+            <textarea class="textarea" id="r-msg" name="message" data-label="Message" placeholder="e.g. a speaker you'd like to nominate, or a topic BGS should tackle next"></textarea>
+          </div>
+          <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="sr-only" aria-hidden="true" />
+          <button type="submit" class="btn">Register interest <Icon name="arrow-right" /></button>
+          <p class="form-status" role="status" tabindex="-1"></p>
+          <p class="form-note">
+            By registering you agree to our <a href="/privacy-policy/">privacy policy</a>. Prefer to talk? Call
+            <a href={contact.phoneHref}>{contact.phone}</a>.
+          </p>
+        </form>
+      </div>
+
+      <aside class="reg__aside">
+        <div class="stack" style="--stack:1rem">
+          <p class="eyebrow">What to expect</p>
+          <h2>Built for boardroom leaders and those preparing to join them.</h2>
+        </div>
+        <ul class="expect">
+          {
+            expect.map((e) => (
+              <li>
+                <h3>{e.title}</h3>
+                <p>{e.text}</p>
+              </li>
+            ))
+          }
+        </ul>
+        <div class="card card--paper aside-card">
+          <p class="mono">Missed BGS 2026?</p>
+          <p>Read the recap, the Chairman's address and the Convener's letter to delegates.</p>
+          <a class="link-arrow" href="/summit-2026/">BGS 2026 recap <Icon name="arrow-right" /></a>
+        </div>
+        <div class="card card--paper aside-card">
+          <p class="mono">Sponsoring?</p>
+          <p>See packages from Platinum to Bronze, or talk to the partnerships team.</p>
+          <a class="link-arrow" href="/sponsorship/">Sponsorship packages <Icon name="arrow-right" /></a>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Pre-select interest from ?interest=sponsor|speak|attend|media|group
+  const key = new URLSearchParams(location.search).get('interest');
+  if (key) {
+    const boxes = document.querySelectorAll<HTMLInputElement>('input[name="interest"]');
+    const match = [...boxes].find((b) => b.dataset.key === key);
+    if (match) {
+      boxes.forEach((b) => (b.checked = b === match));
+    }
+  }
+  // Require at least one interest
+  const form = document.querySelector<HTMLFormElement>('form[data-bgs-form]');
+  form?.addEventListener(
+    'submit',
+    (e) => {
+      const any = form.querySelectorAll('input[name="interest"]:checked').length > 0;
+      const first = form.querySelector<HTMLInputElement>('input[name="interest"]');
+      first?.setCustomValidity(any ? '' : 'Please choose at least one option.');
+      if (!any) {
+        e.stopImmediatePropagation();
+        e.preventDefault();
+        first?.reportValidity();
+      }
+    },
+    { capture: true },
+  );
+  form?.addEventListener('change', () =>
+    form.querySelector<HTMLInputElement>('input[name="interest"]')?.setCustomValidity(''),
+  );
+</script>
+
+<style>
+  .reg {
+    display: grid;
+    gap: 3rem;
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .reg {
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 4rem;
+    }
+  }
+  .reg__form {
+    display: grid;
+    gap: 1rem;
+    box-shadow: var(--shadow);
+  }
+  .reg__form h2 {
+    font-size: var(--fs-h3);
+  }
+  .reg__form .form {
+    margin-top: 1rem;
+  }
+  .reg__form .form > .btn {
+    justify-self: start;
+  }
+  .reg__aside {
+    display: grid;
+    gap: 2rem;
+  }
+  .reg__aside h2 {
+    font-size: clamp(1.5rem, 1.25rem + 1vw, 2.1rem);
+  }
+  .expect {
+    list-style: none;
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+  .expect li {
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .expect h3 {
+    font-size: 1.05rem;
+    margin-bottom: 0.25rem;
+  }
+  .expect p {
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+  .aside-card {
+    display: grid;
+    gap: 0.75rem;
+    justify-items: start;
+    padding: 1.5rem;
+  }
+  .aside-card .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .form-note a {
+    color: var(--navy-800);
+  }
+</style>

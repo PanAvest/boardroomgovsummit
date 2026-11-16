@@ -1,0 +1,345 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import EditionsTimeline from '../components/EditionsTimeline.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { endorsements, site } from '../data/site';
+
+import hero from '../assets/images/events/2025/bgs-2025-313-of-465.jpg';
+import room from '../assets/images/events/2024/bgs-2024-161.jpg';
+import g2025 from '../assets/images/events/2025/bgs-2025-2-of-7.jpg';
+import g2024 from '../assets/images/events/2024/bgs-2024-220.jpg';
+import g2026 from '../assets/images/events/2026/bgs-2026-group-photo.jpg';
+
+const unique = [
+  { title: 'Pan-African focus', text: 'Participation from across the continent, addressing governance in both mature and emerging markets.' },
+  { title: 'Multi-sectoral representation', text: 'From energy and finance to health and ICT, BGS is where policy intersects with corporate leadership.' },
+  { title: 'Evidence-based dialogue', text: 'Discussions rooted in case studies, research, expert insight and real-world governance experience.' },
+  { title: 'Cross-generational exchange', text: 'Seasoned chairpersons sit alongside emerging directors and young executives preparing for board responsibility.' },
+];
+
+const attend = [
+  'Board chairpersons and members',
+  'CEOs and executive directors',
+  'Governance professionals and corporate secretaries',
+  'Legal, risk and compliance officers',
+  'Regulators and government officials',
+  'Institutional investors and policy analysts',
+  'Aspiring young board leaders',
+];
+
+const stakeholders = [
+  'Governance think tanks and policy institutions',
+  'Regulatory bodies: financial, energy and corporate affairs',
+  'Development agencies and investment boards',
+  'Universities and executive training institutions',
+];
+
+const walkAway = [
+  { icon: 'book', title: 'A book to keep', text: "A complimentary copy of Prof. Boateng's latest book on boardroom governance." },
+  { icon: 'award', title: 'CPD certificate', text: 'An official certificate of attendance, qualifying for CPD points with the relevant institute.' },
+  { icon: 'network', title: 'A lasting network', text: 'Membership of a local and continental network of boardroom professionals.' },
+  { icon: 'mail', title: 'Ongoing insight', text: 'Our governance newsletter and NyansaKasa on Boardroom Governance, delivered to you.' },
+] as const;
+---
+
+<BaseLayout
+  title="About the Summit"
+  description="The Boardroom Governance Summit is a flagship leadership and governance event fostering bold, ethical and transformative boardroom practice across Africa."
+>
+  <PageHero
+    eyebrow="About BGS"
+    title="Shaping accountability in the boardrooms."
+    lead="A flagship leadership and governance event designed to foster bold, ethical and transformative boardroom practice across Africa."
+    image={hero}
+    imageAlt="Delegates and guests of honour at BGS 2025"
+    crumbs={[{ label: 'About' }]}
+  />
+
+  <section class="section">
+    <div class="container split split--top">
+      <div class="stack" style="--stack:1.5rem">
+        <p class="eyebrow">Our purpose</p>
+        <h2>A thought-leadership platform for the people who govern.</h2>
+      </div>
+      <div class="stack lead-copy" style="--stack:1.25rem">
+        <p class="lead">
+          The Boardroom Governance Summit (BGS) brings together a dynamic mix of public and private sector leaders to
+          deliberate on critical governance issues, share insights and explore actionable strategies for board
+          effectiveness.
+        </p>
+        <p>
+          Since its inception in 2024, BGS has served as a thought-leadership platform offering expert dialogue,
+          peer-to-peer learning and exposure to international best practice in corporate governance, strategic
+          oversight and stakeholder engagement. It is organised by {site.organiser} and convened by Ing. Prof.
+          Douglas Boateng.
+        </p>
+        <p>
+          It is also unapologetically a room built around Ghana's boardroom leadership: majority Ghanaian chairpersons,
+          directors and C-suite leaders from our banks, state institutions and major corporates, joined by a growing
+          delegation from across Africa and beyond.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">What makes BGS unique</p>
+        <h2>Four things you won't find in a textbook.</h2>
+      </div>
+      <ol class="unique">
+        {
+          unique.map((u, i) => (
+            <li data-reveal style={`transition-delay:${i * 80}ms`}>
+              <span class="unique__n">0{i + 1}</span>
+              <h3>{u.title}</h3>
+              <p>{u.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split split--top">
+      <div class="media room" data-reveal>
+        <Image src={room} alt="The summit hall at Labadi Beach Hotel, Accra" widths={[500, 900, 1200]} sizes="(min-width: 900px) 45vw, 92vw" />
+      </div>
+      <div class="stack" style="--stack:2.5rem">
+        <div class="stack" style="--stack:1.25rem">
+          <p class="eyebrow">This summit is for you</p>
+          <h2>Who should attend?</h2>
+          <ul class="check-list">
+            {attend.map((a) => <li>{a}</li>)}
+          </ul>
+        </div>
+        <div class="stack" style="--stack:1rem">
+          <h3>Strategic stakeholders</h3>
+          <p class="muted">The catalysts of governance innovation who help shape the conversation.</p>
+          <ul class="rule-list stakeholders">
+            {stakeholders.map((s) => <li>{s}</li>)}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow eyebrow--gold">What you walk away with</p>
+          <h2>More than notes from a conference.</h2>
+        </div>
+        <p class="lead">The summit is the beginning of the relationship, not the whole of it.</p>
+      </div>
+      <div class="grid grid--4">
+        {
+          walkAway.map((w) => (
+            <div class="card card--dark walk" data-reveal>
+              <span class="walk__icon">
+                <Icon name={w.icon} />
+              </span>
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container split split--top">
+      <div class="stack" style="--stack:1.25rem">
+        <p class="eyebrow">Institutional confidence</p>
+        <h2>Endorsed by the institutions that shape Ghana's governance.</h2>
+        <p class="lead">
+          Past and present endorsements, alongside the backing of ministries from Finance and Trade to Health,
+          Defence, Education, Transport and the Public and Civil Service.
+        </p>
+      </div>
+      <ul class="endorse">
+        {endorsements.map((e) => <li>{e}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <LogoMarquee />
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">BGS in focus</p>
+          <h2>Highlights from every edition.</h2>
+        </div>
+        <p class="lead">From the inaugural summit in 2024 to the third edition in 2026.</p>
+      </div>
+      <EditionsTimeline />
+      <div class="highlights">
+        {
+          [
+            { img: g2026, year: '2026', href: '/2026-gallery/' },
+            { img: g2025, year: '2025', href: '/2025-gallery/' },
+            { img: g2024, year: '2024', href: '/gallery/' },
+          ].map((h) => (
+            <a class="highlight" href={h.href}>
+              <Image src={h.img} alt="" widths={[400, 700]} sizes="(min-width: 900px) 30vw, 92vw" />
+              <span>
+                {h.year} picture highlights <Icon name="arrow-up-right" size={18} />
+              </span>
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand />
+</BaseLayout>
+
+<style>
+  .lead-copy p:not(.lead) {
+    color: var(--ink-2);
+  }
+  .unique {
+    list-style: none;
+    display: grid;
+    gap: 0;
+    border-top: 1px solid var(--line-strong);
+  }
+  @media (min-width: 720px) {
+    .unique {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .unique {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .unique li {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+    padding: 2rem 1.5rem 2.25rem 0;
+  }
+  @media (min-width: 1100px) {
+    .unique li + li {
+      padding-left: 1.5rem;
+      border-left: 1px solid var(--line);
+    }
+  }
+  .unique__n {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    color: var(--red);
+    line-height: 1;
+  }
+  .unique h3 {
+    font-size: 1.3rem;
+  }
+  .unique p {
+    color: var(--muted);
+  }
+  .room {
+    aspect-ratio: 4 / 5;
+  }
+  .stakeholders li {
+    display: block;
+    padding: 0.9rem 0;
+    font-weight: 500;
+  }
+  .walk {
+    display: grid;
+    gap: 0.8rem;
+    align-content: start;
+  }
+  .walk__icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(253, 213, 7, 0.12);
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+  }
+  .walk h3 {
+    font-size: 1.2rem;
+  }
+  .walk p {
+    font-size: 0.95rem;
+  }
+  .endorse {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
+  }
+  .endorse li {
+    padding: 1.3rem 1.25rem;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-weight: 650;
+    letter-spacing: -0.01em;
+  }
+  .highlights {
+    display: grid;
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  @media (min-width: 900px) {
+    .highlights {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .highlight {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: var(--radius);
+    color: var(--white);
+    text-decoration: none;
+  }
+  .highlight :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s var(--ease);
+  }
+  .highlight::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 40%, rgba(2, 11, 38, 0.85));
+  }
+  .highlight span {
+    position: absolute;
+    z-index: 1;
+    left: 1.25rem;
+    right: 1.25rem;
+    bottom: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1.15rem;
+  }
+  .highlight:hover :global(img) {
+    transform: scale(1.05);
+  }
+</style>

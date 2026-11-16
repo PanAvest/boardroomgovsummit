@@ -1,0 +1,147 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { partners2026, mediaPartners2026, pastPartners } from '../data/site';
+import poster from '../assets/images/promo/bgs-2026-thank-you-sponsors.jpg';
+import ctaImg from '../assets/images/events/2025/bgs-2025-430-of-465.jpg';
+
+const groups = [
+  { name: 'BGS 2026 stakeholders, collaborators & partners', items: partners2026 },
+  { name: 'BGS 2026 media partners', items: mediaPartners2026 },
+  { name: 'Past collaborators, 2024–2025', items: pastPartners },
+];
+---
+
+<BaseLayout
+  title="Partners"
+  description="The government institutions, professional bodies and industry partners who have collaborated with, endorsed and sponsored the Boardroom Governance Summit."
+>
+  <PageHero
+    compact
+    eyebrow="Get to know"
+    title="Past &amp; present collaborators, associates and sponsors."
+    lead="BGS is made possible by organisations committed to advancing thoughtful corporate governance and boardroom leadership in Ghana and across Africa."
+    crumbs={[{ label: 'Partners' }]}
+  >
+    <div class="btn-row">
+      <a class="btn" href="/sponsorship/">Become a partner <Icon name="arrow-right" /></a>
+    </div>
+  </PageHero>
+
+  {
+    groups.map((g, i) => (
+      <section class:list={['section', 'section--tight', { 'section--paper': i % 2 === 1 }]}>
+        <div class="container">
+          <div class="group-head">
+            <h2>{g.name}</h2>
+            <span class="mono">{String(g.items.length).padStart(2, '0')}</span>
+          </div>
+          <ul class="logos">
+            {g.items.map((p) => (
+              <li>
+                <div class="logos__img">
+                  <Image src={p.logo} alt="" height={90} densities={[1, 2]} />
+                </div>
+                <p>{p.name}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    ))
+  }
+
+  <section class="section section--dark">
+    <div class="container split">
+      <div class="stack" style="--stack:1.25rem">
+        <p class="eyebrow eyebrow--gold">BGS 2026</p>
+        <h2>A heartfelt thank you to our sponsors and partners.</h2>
+        <p class="lead">
+          The success of BGS 2026 would not have been possible without your support and commitment. We deeply
+          appreciate your shared commitment to strengthening corporate governance, promoting responsible leadership and
+          driving sustainable institutional growth across Africa.
+        </p>
+        <p><strong style="color:#fff">The BGS 2026 Organising Team</strong></p>
+        <a class="link-arrow on-dark" href="/2026/11/13/thank-you-to-our-sponsors-and-partners/">Read the note <Icon name="arrow-right" /></a>
+      </div>
+      <div class="poster">
+        <Image src={poster} alt="Thank you, sponsors and partners: BGS 2026 stakeholders, collaborators and partners" widths={[400, 700, 1000]} sizes="(min-width: 900px) 40vw, 92vw" />
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    image={ctaImg}
+    title="Partner with BGS 2027."
+    text="Join the institutions standing behind accountable leadership in Africa's boardrooms."
+    primary={{ label: 'See sponsorship packages', href: '/sponsorship/' }}
+    secondary={{ label: 'Contact us', href: '/contact/' }}
+  />
+</BaseLayout>
+
+<style>
+  .group-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding-bottom: 1.25rem;
+    margin-bottom: 2rem;
+    border-bottom: 2px solid var(--ink);
+  }
+  .group-head h2 {
+    font-size: var(--fs-h3);
+  }
+  .group-head .mono {
+    color: var(--muted);
+  }
+  .logos {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+    gap: 1rem;
+  }
+  .logos li {
+    display: grid;
+    gap: 0.75rem;
+    align-content: start;
+  }
+  .logos__img {
+    display: grid;
+    place-items: center;
+    height: 140px;
+    padding: 1.25rem;
+    background: var(--white);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    transition:
+      border-color 0.2s,
+      transform 0.2s var(--ease);
+  }
+  .logos li:hover .logos__img {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+  }
+  .logos__img :global(img) {
+    max-height: 88px;
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+  }
+  .logos p {
+    font-size: 0.85rem;
+    line-height: 1.35;
+    color: var(--ink-2);
+  }
+  .poster {
+    max-width: 460px;
+    justify-self: center;
+  }
+  .poster :global(img) {
+    border-radius: var(--radius);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  }
+</style>

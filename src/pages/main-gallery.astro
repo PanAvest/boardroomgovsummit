@@ -1,0 +1,188 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { items2026 } from '../lib/gallery';
+import manifest2026 from '../data/gallery-2026.json';
+import cover2025 from '../assets/images/events/2025/bgs-2025-1-of-7.jpg';
+import cover2024 from '../assets/images/events/2024/bgs-2024-269.jpg';
+
+const events = import.meta.glob('../assets/images/events/*/*.{jpg,jpeg,png}');
+const count = (y: string) => Object.keys(events).filter((p) => p.includes(`/events/${y}/`)).length;
+const preview = items2026().filter((_, i) => [3, 40, 75, 120, 160, 210, 260, 330].includes(i));
+
+const albums = [
+  {
+    year: '2026',
+    href: '/2026-gallery/',
+    theme: 'Board Committees: From Oversight to Impact',
+    date: '12 November 2026',
+    count: manifest2026.length,
+    cover: '/gallery/2026/full/' + manifest2026[1].name + '.webp',
+    brochure: '/files/bgs-2026-brochure.pdf',
+  },
+  { year: '2025', href: '/2025-gallery/', theme: 'Daring to be Different', date: '14 October 2025', count: count('2025'), image: cover2025, brochure: '/wp-content/uploads/2025/10/BGS-BROCHURE.pdf' },
+  { year: '2024', href: '/gallery/', theme: 'The inaugural summit', date: '8 October 2024', count: count('2024'), image: cover2024, brochure: '/wp-content/uploads/2025/10/Brochure-CC.pdf' },
+];
+---
+
+<BaseLayout title="Gallery" description="Pictures from every edition of the Boardroom Governance Summit: 2024, 2025 and 2026, at the Labadi Beach Hotel, Accra.">
+  <PageHero
+    compact
+    eyebrow="Highlights"
+    title="Every edition, in pictures."
+    lead="The energy, moments and milestones of the Boardroom Governance Summit, from the inaugural edition in 2024 to BGS 2026."
+    crumbs={[{ label: 'Gallery' }]}
+  />
+
+  <section class="section">
+    <div class="container">
+      <ul class="albums">
+        {
+          albums.map((a) => (
+            <li class="album" data-reveal>
+              <a href={a.href} class="album__media">
+                {a.image ? (
+                  <Image src={a.image} alt="" widths={[480, 800, 1200]} sizes="(min-width: 1000px) 33vw, 92vw" />
+                ) : (
+                  <img src={a.cover} alt="" loading="lazy" />
+                )}
+                <span class="album__year">{a.year}</span>
+                <span class="album__count mono">{a.count} photos</span>
+              </a>
+              <div class="album__body">
+                <p class="eyebrow">{a.date}</p>
+                <h2>
+                  <a href={a.href}>
+                    {a.year} picture highlights <Icon name="arrow-right" size={20} />
+                  </a>
+                </h2>
+                <p class="muted">{a.theme}</p>
+                <a class="link-arrow" href={a.brochure} download>
+                  <Icon name="download" /> {a.year} brochure (PDF)
+                </a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Just added</p>
+          <h2>497 photographs from BGS 2026.</h2>
+        </div>
+        <a class="btn btn--navy" href="/2026-gallery/">Open the 2026 gallery <Icon name="arrow-right" /></a>
+      </div>
+      <div class="preview">
+        {
+          preview.map((p) => (
+            <a href="/2026-gallery/" class="media">
+              <img src={p.thumb} alt="" loading="lazy" width={p.w} height={p.h} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <CtaBand title="Be in the next set of pictures." />
+</BaseLayout>
+
+<style>
+  .albums {
+    list-style: none;
+    display: grid;
+    gap: 2.5rem 1.5rem;
+  }
+  @media (min-width: 1000px) {
+    .albums {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .album {
+    display: grid;
+    gap: 1.25rem;
+    align-content: start;
+  }
+  .album__media {
+    position: relative;
+    display: block;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border-radius: var(--radius);
+    color: var(--white);
+  }
+  .album__media :global(img),
+  .album__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.8s var(--ease);
+  }
+  .album__media::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 45%, rgba(2, 11, 38, 0.8));
+  }
+  .album:hover .album__media :global(img),
+  .album:hover .album__media img {
+    transform: scale(1.05);
+  }
+  .album__year {
+    position: absolute;
+    z-index: 1;
+    left: 1.25rem;
+    bottom: 0.9rem;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 2rem + 3vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .album__count {
+    position: absolute;
+    z-index: 1;
+    right: 1rem;
+    bottom: 1.2rem;
+    font-size: 0.75rem;
+    opacity: 0.85;
+  }
+  .album__body {
+    display: grid;
+    gap: 0.7rem;
+    justify-items: start;
+  }
+  .album h2 {
+    font-size: 1.5rem;
+  }
+  .album h2 a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    text-decoration: none;
+  }
+  .album h2 a:hover {
+    color: var(--red);
+  }
+  .preview {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  @media (min-width: 800px) {
+    .preview {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+  .preview .media {
+    aspect-ratio: 1;
+  }
+</style>

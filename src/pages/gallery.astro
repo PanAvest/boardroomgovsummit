@@ -1,0 +1,13 @@
+---
+// /gallery/ was the 2024 gallery on the original site, so it stays that way.
+import EditionGallery from '../components/EditionGallery.astro';
+import { editionItems } from '../lib/gallery';
+---
+
+<EditionGallery
+  year="2024"
+  title="BGS 2024 · The inaugural summit"
+  lead="The maiden edition on 8 October 2024: over 700 C-suite executives, the Minister for Finance's keynote and the launch of Practical Perspectives on Boardroom Governance."
+  items={await editionItems('2024')}
+  brochure={{ href: '/wp-content/uploads/2025/10/Brochure-CC.pdf', label: 'Download the 2024 brochure' }}
+/>

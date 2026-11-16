@@ -1,0 +1,94 @@
+---
+import Icon from './Icon.astro';
+import { nextEdition } from '../data/site';
+---
+
+<div class="announce" data-announce hidden>
+  <div class="container announce__inner">
+    <p>
+      <span class="announce__tag">BGS 2026 is a wrap</span>
+      <span class="announce__text">Thank you to every delegate, speaker and partner who joined us on 12 November.</span>
+      <a href={nextEdition.href}>Register interest for {nextEdition.year} <Icon name="arrow-right" size={14} /></a>
+    </p>
+    <button type="button" class="announce__close" aria-label="Dismiss announcement" data-announce-close>
+      <Icon name="close" size={16} />
+    </button>
+  </div>
+</div>
+
+<script>
+  const KEY = 'bgs-announce-2026-wrap';
+  const bar = document.querySelector<HTMLElement>('[data-announce]');
+  if (bar && localStorage.getItem(KEY) !== '1') bar.hidden = false;
+  bar?.querySelector('[data-announce-close]')?.addEventListener('click', () => {
+    bar.hidden = true;
+    localStorage.setItem(KEY, '1');
+  });
+</script>
+
+<style>
+  .announce {
+    background: var(--navy-900);
+    color: rgba(255, 255, 255, 0.86);
+    font-size: 0.82rem;
+    border-bottom: 1px solid var(--line-dark);
+  }
+  .announce[hidden] {
+    display: none;
+  }
+  .announce__inner {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    min-height: 42px;
+    padding-block: 0.4rem;
+  }
+  .announce p {
+    flex: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem 0.9rem;
+    text-align: center;
+  }
+  .announce__tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .announce a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--white);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.4);
+  }
+  .announce a:hover {
+    text-decoration-color: var(--gold);
+  }
+  .announce__close {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+  }
+  .announce__close:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--white);
+  }
+  @media (max-width: 720px) {
+    .announce__text {
+      display: none;
+    }
+  }
+</style>

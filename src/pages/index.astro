@@ -1,0 +1,915 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import ThankYouBanner from '../components/ThankYouBanner.astro';
+import EditionsTimeline from '../components/EditionsTimeline.astro';
+import LogoMarquee from '../components/LogoMarquee.astro';
+import LatestNews from '../components/LatestNews.astro';
+import SpeakerCard from '../components/SpeakerCard.astro';
+import SpeakerDialog from '../components/SpeakerDialog.astro';
+import FaqList from '../components/FaqList.astro';
+import VideoEmbed from '../components/VideoEmbed.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { chairman, guestsOfHonour } from '../data/bgs2026';
+import { stats, faqGroups, nextEdition, contact } from '../data/site';
+
+import heroImg from '../assets/images/events/2026/bgs-2026-convener-address.jpg';
+import wordmark2026 from '../assets/images/brand/bgs-2026-wordmark.png';
+import about1 from '../assets/images/events/2025/bgs-2025-350-of-465.jpg';
+import about2 from '../assets/images/events/2025/bgs-2025-349-of-465.jpg';
+import about3 from '../assets/images/events/2025/bgs-2025-425-of-465.jpg';
+import r1 from '../assets/images/events/2026/bgs-2026-group-photo.jpg';
+import r2 from '../assets/images/events/2026/bgs-2026-chairman-address.jpg';
+import r3 from '../assets/images/events/2026/bgs-2026-audience.jpg';
+import convener from '../assets/images/people/douglas-boateng-stage-2024.jpg';
+import videoPoster from '../assets/images/events/2025/bgs-2025-7-of-7.jpg';
+import ctaImg from '../assets/images/events/2024/bgs-2024-161.jpg';
+
+const faces = [chairman, ...guestsOfHonour.slice(0, 7)].map((p, i) => ({
+  ...p,
+  badge: i === 0 ? 'Chairman of the Summit' : undefined,
+  tone: (['red', 'navy', 'ink', 'gold'] as const)[i % 4],
+}));
+const faqs = faqGroups.flatMap((g) => g.items).slice(0, 4);
+
+const takeaways = [
+  { n: '01', title: 'Competence, not convenience', text: 'Committee composition must follow mandate. An audit committee without real financial expertise cannot fulfil its purpose.' },
+  { n: '02', title: 'Real mandates, real independence', text: 'Clear terms of reference, unrestricted access to information and the right to independent advice.' },
+  { n: '03', title: 'Connected to strategy', text: 'The best committees look forward, asking whether controls, investments, people and culture fit where the organisation is going.' },
+  { n: '04', title: 'Reporting that informs decisions', text: 'Impact is measured not by meetings held but by the quality of the decisions that follow.' },
+];
+---
+
+<BaseLayout>
+  <!-- ============================== HERO ============================== -->
+  <section class="hero">
+    <div class="hero__shapes" aria-hidden="true">
+      <span class="hs hs--1"></span>
+      <span class="hs hs--2"></span>
+      <span class="hs hs--3"></span>
+    </div>
+    <div class="container hero__inner">
+      <div class="hero__copy">
+        <p class="eyebrow">Boardroom Governance Summit · Accra, Ghana</p>
+        <h1>The Africa we desire starts in the boardroom.</h1>
+        <p class="lead">
+          Africa's pioneering boardroom-focused summit. Once a year, board chairpersons, directors, chief executives,
+          regulators and policymakers gather in Accra to confront how governance really works under pressure.
+        </p>
+        <div class="btn-row">
+          <a class="btn" href={nextEdition.href}>{nextEdition.ctaLabel}<Icon name="arrow-right" /></a>
+          <a class="btn btn--ghost-light" href="/summit-2026/">Relive BGS 2026</a>
+        </div>
+        <dl class="hero__facts">
+          <div>
+            <dt>Next edition</dt>
+            <dd>BGS {nextEdition.year} · dates to be announced</dd>
+          </div>
+          <div>
+            <dt>Home</dt>
+            <dd>{contact.venue}, Accra</dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="hero__media">
+        <div class="hero__frame">
+          <Image
+            src={heroImg}
+            alt="Ing. Prof. Douglas Boateng addressing delegates at the Boardroom Governance Summit 2026"
+            widths={[500, 800, 1100]}
+            sizes="(min-width: 1000px) 42vw, 92vw"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="hero__card">
+          <Image src={wordmark2026} alt="Boardroom Governance Summit 2026" width={220} densities={[1, 2]} />
+          <p class="hero__card-theme">Board Committees: From Oversight to Impact</p>
+          <p class="hero__card-meta"><span class="dot"></span> Concluded · 12 November 2026</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <ThankYouBanner />
+
+  <!-- ============================== STATS ============================== -->
+  <section class="stats" aria-label="BGS at a glance">
+    <div class="container">
+      <ul class="stats__grid">
+        {
+          stats.map((s) => (
+            <li data-reveal>
+              <span class="stats__value">{s.value}</span>
+              <span class="stats__label">{s.label}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================== ABOUT ============================== -->
+  <section class="section">
+    <div class="container split split--wide-left">
+      <div class="stack" style="--stack:1.5rem" data-reveal>
+        <p class="eyebrow">About the Summit</p>
+        <h2>A room built for honest boardroom conversations.</h2>
+        <p class="lead">
+          The Boardroom Governance Summit brings together top-tier board members, corporate executives, governance
+          professionals, regulators and thought leaders from across Africa and beyond.
+        </p>
+        <ul class="features">
+          <li>
+            <span class="features__icon"><Icon name="users" /></span>
+            <div>
+              <h3>Panel discussions</h3>
+              <p>Three panels a year on the critical boardroom questions, each followed by open audience Q&amp;A.</p>
+            </div>
+          </li>
+          <li>
+            <span class="features__icon"><Icon name="mic" /></span>
+            <div>
+              <h3>Keynote addresses</h3>
+              <p>National leaders, from a Minister for Finance to the Chief of Staff, set the tone for the day.</p>
+            </div>
+          </li>
+          <li>
+            <span class="features__icon"><Icon name="network" /></span>
+            <div>
+              <h3>Networking that lasts</h3>
+              <p>Meet chairpersons, CEOs, regulators and policymakers who are hard to reach on a normal working day.</p>
+            </div>
+          </li>
+        </ul>
+        <a class="link-arrow" href="/about/">More about the summit <Icon name="arrow-right" /></a>
+      </div>
+
+      <div class="collage" data-reveal>
+        <div class="media collage__a">
+          <Image src={about1} alt="A delegate receives a citation at BGS 2025" widths={[500, 900]} sizes="(min-width: 900px) 40vw, 90vw" />
+        </div>
+        <div class="media collage__b">
+          <Image src={about2} alt="Guests of honour seated at BGS 2025" widths={[400, 700]} sizes="(min-width: 900px) 20vw, 45vw" />
+        </div>
+        <div class="media collage__c">
+          <Image src={about3} alt="Delegates at BGS 2025" widths={[400, 700]} sizes="(min-width: 900px) 20vw, 45vw" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== 2026 IN REVIEW ============================== -->
+  <section class="section section--dark review">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow eyebrow--gold">BGS 2026 in review</p>
+          <h2>From oversight to impact.</h2>
+        </div>
+        <p class="lead">
+          For the first time on an African platform of this scale, BGS 2026 put board committees under the spotlight:
+          audit, risk, remuneration, nominations, finance and ESG.
+        </p>
+      </div>
+
+      <article class="event-card" data-reveal>
+        <div class="event-card__date" aria-hidden="true">
+          <span>Nov</span>
+          <strong>12</strong>
+          <span>2026</span>
+        </div>
+        <div class="event-card__body">
+          <p class="mono text-gold">12 November 2026 · Labadi Beach Hotel, Accra &amp; online</p>
+          <h3>Board Committees: From Oversight to Impact</h3>
+          <p>
+            Chaired by H.E. Dr. Ekwow Spio-Garbrah, Senior Advisor to the President and Presidential Special Envoy for Reparations, and
+            convened by Ing. Prof. Douglas Boateng.
+          </p>
+          <div class="event-card__links">
+            <a class="link-arrow" href="/summit-2026/">Read the 2026 recap <Icon name="arrow-right" /></a>
+            <a class="link-arrow" href="/2026/11/13/chairmans-address-the-africa-we-desire-starts-in-the-boardroom/"
+              >Chairman's address <Icon name="arrow-right" /></a
+            >
+          </div>
+        </div>
+      </article>
+
+      <ol class="takeaways">
+        {
+          takeaways.map((t, i) => (
+            <li data-reveal style={`transition-delay:${i * 80}ms`}>
+              <span class="mono">{t.n}</span>
+              <h3>{t.title}</h3>
+              <p>{t.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <p class="takeaways__source mono">Four reflections from the Chairman's address, BGS 2026</p>
+
+      <div class="review__photos">
+        <div class="media" data-reveal>
+          <Image src={r1} alt="Speakers, partners and guests on stage at BGS 2026" widths={[600, 1000, 1400]} sizes="(min-width: 900px) 50vw, 95vw" />
+        </div>
+        <div class="media" data-reveal>
+          <Image src={r2} alt="The Chairman's address at BGS 2026" widths={[400, 700]} sizes="(min-width: 900px) 25vw, 95vw" />
+        </div>
+        <div class="media" data-reveal>
+          <Image src={r3} alt="Delegates in the hall at BGS 2026" widths={[400, 700]} sizes="(min-width: 900px) 25vw, 95vw" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FACES OF 2026 ============================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Faces of BGS 2026</p>
+          <h2>On the stage in Accra.</h2>
+        </div>
+        <p class="lead">
+          The Chairman of the Summit and our Special Guests of Honour, alongside eleven panellists across three
+          committee panels. Select a portrait to read the profile.
+        </p>
+      </div>
+      <div class="speaker-grid">
+        {faces.map((p) => <SpeakerCard speaker={p} />)}
+      </div>
+      <p class="faces__more">
+        <a class="btn btn--ghost" href="/past-speakers/">All speakers and panellists <Icon name="arrow-right" /></a>
+      </p>
+    </div>
+  </section>
+  <SpeakerDialog />
+
+  <!-- ============================== EDITIONS ============================== -->
+  <section class="section section--paper">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Three editions</p>
+          <h2>One conviction: governance is decided in the boardroom.</h2>
+        </div>
+        <p class="lead">
+          Since its maiden edition in 2024, BGS has grown from 700 executives to more than 1,000 boardroom leaders,
+          each year tackling one question boards would rather avoid.
+        </p>
+      </div>
+      <EditionsTimeline />
+    </div>
+  </section>
+
+  <!-- ============================== CONVENER ============================== -->
+  <section class="section">
+    <div class="container split split--wide-right">
+      <div class="convener__media" data-reveal>
+        <div class="media">
+          <Image src={convener} alt="Ing. Prof. Douglas Boateng on stage at the Boardroom Governance Summit" widths={[500, 900]} sizes="(min-width: 900px) 40vw, 92vw" />
+        </div>
+      </div>
+      <div class="stack" style="--stack:1.5rem" data-reveal>
+        <p class="eyebrow">Message from the Convener</p>
+        <blockquote class="convener__quote">
+          <p>
+            “Boardrooms must evolve, not just to meet compliance standards, but to lead with integrity, foresight and
+            impact.”
+          </p>
+        </blockquote>
+        <p>
+          The Boardroom Governance Summit was created to foster critical dialogue, share insights and strengthen
+          corporate governance practices across Africa. In an era marked by disruption, innovation and growing
+          stakeholder expectations, it brings together seasoned leaders, emerging thinkers, regulators and
+          professionals committed to raising the bar of accountability and strategic leadership.
+        </p>
+        <p>
+          Thank you for being part of this movement. I look forward to the connections, conversations and commitments
+          that will shape better boardrooms and, ultimately, better organisations.
+        </p>
+        <div class="signature">
+          <span class="kente-rule"><span></span></span>
+          <p><strong>Ing. Prof. Douglas Boateng</strong><br /><span class="muted">Founder and Convener, Boardroom Governance Summit</span></p>
+        </div>
+        <a class="link-arrow" href="/the-convener/">About the Convener <Icon name="arrow-right" /></a>
+      </div>
+    </div>
+  </section>
+
+  <LogoMarquee />
+
+  <!-- ============================== BEYOND THE SUMMIT ============================== -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div class="stack">
+          <p class="eyebrow">Beyond the summit</p>
+          <h2>The conversation continues all year.</h2>
+        </div>
+        <p class="lead">One day in Accra is the start of the relationship, not the whole of it.</p>
+      </div>
+      <div class="pillars">
+        <article class="pillar" data-reveal>
+          <p class="pillar__tag">Education · Coming soon</p>
+          <h3>Certified Board Governance Course</h3>
+          <p>
+            A self-paced, engaging learning experience for directors and executives. BGS 2026 delegates get first
+            access. Watch your registration email for details.
+          </p>
+          <a class="link-arrow" href="/2026/11/13/certified-board-governance-course/">Course announcement <Icon name="arrow-right" /></a>
+        </article>
+        <article class="pillar" data-reveal>
+          <p class="pillar__tag">Publications</p>
+          <h3>Knowledge Development Series</h3>
+          <p>
+            Practical, authoritative books by Prof. Boateng on boardroom governance, negotiations, strategic sourcing and
+            sustainable development. Every delegate takes one home.
+          </p>
+          <a class="link-arrow" href="/books/">Browse the books <Icon name="arrow-right" /></a>
+        </article>
+        <article class="pillar" data-reveal>
+          <p class="pillar__tag">Thought leadership</p>
+          <h3>NyansaKasa and the op-ed series</h3>
+          <p>
+            Words of Wisdom, plus two weekly series: The Inconvenient Truth and What Is Wrong With Us. Uncomfortable
+            questions for Africa's boardrooms.
+          </p>
+          <a class="link-arrow" href="/news/?category=Insights">Read the insights <Icon name="arrow-right" /></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== VIDEO ============================== -->
+  <section class="section section--navy">
+    <div class="container split split--wide-right">
+      <div class="stack" style="--stack:1.4rem">
+        <p class="eyebrow eyebrow--gold">Boardroom trends</p>
+        <h2>Key insights from top executives.</h2>
+        <p class="lead">
+          Hear how evolving governance practices are redefining leadership in Africa and beyond, in the words of the
+          people who sit at the table.
+        </p>
+        <a class="link-arrow on-dark" href="/main-gallery/">See every edition in pictures <Icon name="arrow-right" /></a>
+      </div>
+      <VideoEmbed id="Wq2lG365Jc0" title="Boardroom Governance Summit: key insights from top executives" poster={videoPoster} />
+    </div>
+  </section>
+
+  <!-- ============================== NEWS ============================== -->
+  <section class="section">
+    <div class="container">
+      <div class="news-head">
+        <div class="stack">
+          <p class="eyebrow">News &amp; insights</p>
+          <h2>Latest from BGS.</h2>
+        </div>
+        <a class="btn btn--ghost" href="/news/">All news &amp; insights <Icon name="arrow-right" /></a>
+      </div>
+      <div>
+        <LatestNews server:defer>
+          <div slot="fallback" class="sk-cards" aria-hidden="true"><div><i></i><b></b><b></b></div><div><i></i><b></b><b></b></div><div><i></i><b></b><b></b></div></div>
+        </LatestNews>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== FAQ ============================== -->
+  <section class="section section--paper">
+    <div class="container split split--top">
+      <div class="stack faq-intro" style="--stack:1.5rem">
+        <p class="eyebrow">FAQs</p>
+        <h2>Before you decide, ask us directly.</h2>
+        <p class="lead">Straight answers about the summit, who's in the room and what you walk away with.</p>
+        <a class="link-arrow" href="/frequently-asked-questions-faqs/">All questions <Icon name="arrow-right" /></a>
+        <ul class="contact-mini">
+          <li>
+            <span class="mono">Call</span>
+            <a href={contact.phoneHref}>{contact.phone}</a>
+          </li>
+          <li>
+            <span class="mono">WhatsApp</span>
+            <a href={contact.whatsappHref} target="_blank" rel="noopener">{contact.whatsapp}</a>
+          </li>
+          <li>
+            <span class="mono">Email</span>
+            <a href={`mailto:${contact.email}`}>{contact.email}</a>
+          </li>
+        </ul>
+      </div>
+      <FaqList items={faqs} openFirst />
+    </div>
+  </section>
+
+  <CtaBand image={ctaImg} />
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background: var(--navy-950);
+    color: var(--white);
+    padding-block: clamp(3rem, 2rem + 5vw, 7rem) clamp(4rem, 3rem + 5vw, 8rem);
+  }
+  .hero__inner {
+    position: relative;
+    display: grid;
+    gap: 3.5rem;
+    align-items: center;
+  }
+  @media (min-width: 1000px) {
+    .hero__inner {
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 4.5rem;
+    }
+  }
+  .hero__copy {
+    display: grid;
+    gap: 1.6rem;
+    justify-items: start;
+  }
+  .hero h1 {
+    font-size: var(--fs-h1);
+    max-width: 13ch;
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+  }
+  .hero .lead {
+    max-width: 52ch;
+    color: rgba(255, 255, 255, 0.78);
+  }
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.25rem 2.5rem;
+    margin: 0.75rem 0 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line-dark);
+    width: 100%;
+  }
+  .hero__facts dt {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .hero__facts dd {
+    margin: 0.3rem 0 0;
+    font-weight: 500;
+  }
+  .hero__media {
+    position: relative;
+    max-width: 560px;
+    width: 100%;
+    justify-self: center;
+  }
+  .hero__frame {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 999px 999px var(--radius) var(--radius);
+  }
+  .hero__frame :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 58% center;
+  }
+  .hero__card {
+    position: absolute;
+    left: -1.5rem;
+    bottom: 2rem;
+    display: grid;
+    gap: 0.7rem;
+    max-width: 290px;
+    padding: 1.25rem 1.35rem;
+    border-radius: 16px;
+    background: rgba(2, 11, 38, 0.82);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--line-dark);
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6);
+  }
+  @media (max-width: 640px) {
+    .hero__card {
+      left: 0.75rem;
+      right: 0.75rem;
+      bottom: 0.75rem;
+      max-width: none;
+    }
+  }
+  .hero__card :global(img) {
+    width: 170px;
+    height: auto;
+  }
+  .hero__card-theme {
+    font-family: var(--font-display);
+    font-weight: 650;
+    line-height: 1.3;
+  }
+  .hero__card-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #3ecf7a;
+    box-shadow: 0 0 0 4px rgba(62, 207, 122, 0.2);
+  }
+  .hs {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hs--1 {
+    width: 620px;
+    height: 620px;
+    left: -340px;
+    bottom: -380px;
+    background: var(--navy-800);
+    opacity: 0.6;
+  }
+  .hs--2 {
+    width: 380px;
+    height: 380px;
+    right: -170px;
+    top: 18%;
+    background: var(--navy-700);
+    opacity: 0.4;
+  }
+  .hs--3 {
+    width: 220px;
+    height: 220px;
+    right: 30%;
+    top: -150px;
+    background: var(--red);
+    opacity: 0.2;
+  }
+
+  /* ---------- Stats ---------- */
+  .stats {
+    border-bottom: 1px solid var(--line);
+  }
+  .stats__grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  @media (min-width: 900px) {
+    .stats__grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .stats__grid li {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+    padding: clamp(1.75rem, 1.2rem + 2vw, 3rem) clamp(1rem, 0.5rem + 1.5vw, 2rem);
+    border-left: 1px solid var(--line);
+  }
+  .stats__grid li:nth-child(odd) {
+    border-left: 0;
+  }
+  @media (min-width: 900px) {
+    .stats__grid li:nth-child(odd) {
+      border-left: 1px solid var(--line);
+    }
+    .stats__grid li:first-child {
+      border-left: 0;
+    }
+  }
+  @media (max-width: 899px) {
+    .stats__grid li:nth-child(n + 3) {
+      border-top: 1px solid var(--line);
+    }
+  }
+  .stats__value {
+    font-family: var(--font-display);
+    font-size: clamp(2.4rem, 1.6rem + 3vw, 4rem);
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--navy-900);
+  }
+  .stats__label {
+    font-size: 0.92rem;
+    color: var(--muted);
+    max-width: 22ch;
+  }
+
+  /* ---------- About ---------- */
+  .features {
+    list-style: none;
+    display: grid;
+    gap: 1.4rem;
+    padding: 0.5rem 0 0.5rem;
+  }
+  .features li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+  }
+  .features__icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    background: var(--paper);
+    color: var(--red);
+  }
+  .features h3 {
+    font-size: 1.1rem;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.25rem;
+  }
+  .features p {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .collage {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1rem;
+  }
+  .collage__a {
+    grid-column: 1 / -1;
+    aspect-ratio: 16 / 10;
+  }
+  .collage__b,
+  .collage__c {
+    aspect-ratio: 1;
+  }
+
+  /* ---------- Review ---------- */
+  .event-card {
+    display: grid;
+    gap: 1.75rem;
+    padding: clamp(1.5rem, 1rem + 2vw, 2.5rem);
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.03);
+  }
+  @media (min-width: 720px) {
+    .event-card {
+      grid-template-columns: auto 1fr;
+      gap: 2.5rem;
+    }
+  }
+  .event-card__date {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    width: 104px;
+    height: 120px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .event-card__date strong {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+  .event-card__body {
+    display: grid;
+    gap: 0.9rem;
+    align-content: start;
+  }
+  .event-card h3 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.2rem);
+  }
+  .event-card__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  .takeaways {
+    list-style: none;
+    display: grid;
+    margin-top: 1.5rem;
+    border: 1px solid var(--line-dark);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  @media (min-width: 720px) {
+    .takeaways {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .takeaways {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .takeaways li {
+    display: grid;
+    gap: 0.7rem;
+    align-content: start;
+    padding: 1.75rem 1.6rem 2rem;
+    border-top: 1px solid var(--line-dark);
+    margin-top: -1px;
+    border-left: 1px solid var(--line-dark);
+    margin-left: -1px;
+  }
+  .takeaways .mono {
+    color: var(--gold);
+  }
+  .takeaways h3 {
+    font-size: 1.15rem;
+    letter-spacing: -0.015em;
+  }
+  .takeaways p {
+    font-size: 0.93rem;
+  }
+  .takeaways__source {
+    margin-top: 1rem;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .review__photos {
+    display: grid;
+    gap: 1rem;
+    margin-top: 3rem;
+  }
+  @media (min-width: 900px) {
+    .review__photos {
+      grid-template-columns: 2fr 1fr 1fr;
+    }
+  }
+  .review__photos .media {
+    aspect-ratio: 4 / 3;
+  }
+  @media (min-width: 900px) {
+    .review__photos .media {
+      aspect-ratio: auto;
+      height: 340px;
+    }
+  }
+
+  /* ---------- Convener ---------- */
+  .convener__media .media {
+    aspect-ratio: 4 / 5;
+  }
+  .convener__quote {
+    margin: 0;
+  }
+  .convener__quote p {
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 1.15rem + 1.4vw, 2.3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.15;
+    color: var(--navy-900);
+  }
+  .signature {
+    display: grid;
+    gap: 0.9rem;
+    padding-top: 0.5rem;
+  }
+
+  /* ---------- Pillars ---------- */
+  .pillars {
+    display: grid;
+    border-top: 3px solid var(--navy-900);
+  }
+  @media (min-width: 900px) {
+    .pillars {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .pillar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2rem 1.75rem 2.25rem;
+    border: 1px solid var(--line);
+    border-top: 0;
+  }
+  @media (min-width: 900px) {
+    .pillar + .pillar {
+      border-left: 0;
+    }
+  }
+  .pillar:first-child {
+    border-top-color: var(--red);
+  }
+  .pillar__tag {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+  }
+  .pillar h3 {
+    font-size: 1.55rem;
+  }
+  .pillar p:not(.pillar__tag) {
+    color: var(--muted);
+  }
+  .pillar .link-arrow {
+    margin-top: auto;
+    align-self: flex-start;
+  }
+
+  /* ---------- Faces ---------- */
+  .faces {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2rem 1.25rem;
+  }
+  @media (min-width: 900px) {
+    .faces {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  .faces__more {
+    margin-top: 3rem;
+    text-align: center;
+  }
+
+  /* ---------- News ---------- */
+  .news-skeleton {
+    display: grid;
+    gap: 1.5rem;
+  }
+  @media (min-width: 1000px) {
+    .news-skeleton {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  .news-skeleton span {
+    aspect-ratio: 16 / 13;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, var(--paper), var(--paper-2), var(--paper));
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite linear;
+  }
+  @keyframes shimmer {
+    to {
+      background-position: -200% 0;
+    }
+  }
+  .news-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+  }
+
+  /* ---------- FAQ ---------- */
+  .contact-mini {
+    list-style: none;
+    display: grid;
+    gap: 0.9rem;
+    margin-top: 2rem !important;
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    background: var(--white);
+    border: 1px solid var(--line);
+  }
+  .contact-mini li {
+    display: grid;
+    gap: 0.15rem;
+  }
+  .contact-mini .mono {
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .contact-mini a {
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .contact-mini a:hover {
+    color: var(--red);
+  }
+  @media (min-width: 900px) {
+    .faq-intro {
+      position: sticky;
+      top: calc(var(--header-h) + 2rem);
+    }
+  }
+</style>

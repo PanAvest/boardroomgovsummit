@@ -1,0 +1,139 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import CtaBand from '../components/CtaBand.astro';
+import { books } from '../data/site';
+import launch from '../assets/images/events/2024/bgs-2024-269.jpg';
+---
+
+<BaseLayout
+  title="Books"
+  description="The Knowledge Development Series and Executive Insight Series by Prof. Douglas Boateng: practical perspectives on boardroom governance, negotiations, strategic sourcing and sustainable development."
+>
+  <PageHero
+    compact
+    eyebrow="Read. Learn. Grow."
+    title="Books by the Convener."
+    lead="Practical and authoritative perspectives from Prof. Douglas Boateng's Knowledge Development Series and Executive Insight Series. Every summit delegate takes one home."
+    crumbs={[{ label: 'Media', href: '/news/' }, { label: 'Books' }]}
+  />
+
+  <section class="section">
+    <div class="container">
+      <ul class="books">
+        {
+          books.map((b) => (
+            <li class="book" data-reveal>
+              <div class="book__cover">
+                <Image src={b.cover} alt={`Cover of ${b.title}`} widths={[400, 700]} sizes="(min-width: 1000px) 30vw, (min-width: 640px) 45vw, 92vw" />
+                {b.note && <span class="pill pill--red book__note">{b.note}</span>}
+              </div>
+              <p class="book__series mono">{b.series}</p>
+              <h2>{b.title}</h2>
+              <p class="book__author">Prof. Douglas Boateng</p>
+              <a class="btn btn--sm btn--navy" href={b.href} target="_blank" rel="noopener">
+                Buy on Amazon <Icon name="arrow-up-right" size={16} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--paper">
+    <div class="container split">
+      <div class="media launch" data-reveal>
+        <Image src={launch} alt="The launch of Practical Perspectives on Boardroom Governance at BGS 2024" widths={[500, 900]} sizes="(min-width: 900px) 45vw, 92vw" />
+      </div>
+      <div class="stack" style="--stack:1.25rem">
+        <p class="eyebrow">Launched at BGS 2024</p>
+        <h2>Practical Perspectives on Boardroom Governance</h2>
+        <p class="lead">
+          Launched at the maiden summit, the book offers actionable insights and practical strategies for enhancing
+          governance practice, an essential resource for corporate leaders and board members committed to driving
+          sustainable development.
+        </p>
+        <a class="link-arrow" href="/2024/10/11/boardroom-governance-summit-sets-benchmark-for-accountability-sustainable-growth/"
+          >Read about the launch <Icon name="arrow-right" /></a
+        >
+      </div>
+    </div>
+  </section>
+
+  <CtaBand
+    title="Bulk orders and library donations."
+    text="For institutional copies, or to support the African Conscientisation Library Project, contact the BGS team."
+    primary={{ label: 'Contact us', href: '/contact/' }}
+    secondary={{ label: 'Sponsorship packages', href: '/sponsorship/' }}
+  />
+</BaseLayout>
+
+<style>
+  .books {
+    list-style: none;
+    display: grid;
+    gap: 3.5rem 1.75rem;
+  }
+  @media (min-width: 640px) {
+    .books {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1000px) {
+    .books {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  .book {
+    display: grid;
+    gap: 0.7rem;
+    justify-items: start;
+    align-content: start;
+  }
+  .book__cover {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: #7a7a7a;
+    margin-bottom: 0.75rem;
+  }
+  .book__cover :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: scale(1.18);
+    transition: transform 0.6s var(--ease);
+  }
+  .book:hover .book__cover :global(img) {
+    transform: scale(1.24);
+  }
+  .book__note {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+  }
+  .book__series {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+  .book h2 {
+    font-size: 1.35rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+  }
+  .book__author {
+    color: var(--muted);
+    font-size: 0.92rem;
+    margin-bottom: 0.4rem;
+  }
+  .launch {
+    aspect-ratio: 4 / 3;
+  }
+</style>
