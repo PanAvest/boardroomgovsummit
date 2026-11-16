@@ -46,8 +46,11 @@ export default defineConfig({
   // Pages are static by default; news pages opt in to on-demand rendering so
   // articles published from the dashboard appear without a rebuild.
   adapter: vercel({
+    // Use Vercel's image optimiser everywhere, so images on live (on-demand)
+    // pages work the same as on static ones.
+    imageService: true,
     imagesConfig: {
-      sizes: [320, 480, 640, 800, 1200, 1600, 2000],
+      sizes: [96, 180, 240, 320, 400, 480, 640, 800, 1000, 1200, 1400, 1600, 2000],
       domains: [],
       remotePatterns: [{ protocol: 'https', hostname: '**.supabase.co' }],
     },

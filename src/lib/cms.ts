@@ -146,7 +146,7 @@ export function readingTime(body: string) {
   return Math.max(1, Math.round(body.split(/\s+/).filter(Boolean).length / 230));
 }
 
-const SIZES = [320, 480, 640, 800, 1200, 1600, 2000] as const;
+const SIZES = [96, 180, 240, 320, 400, 480, 640, 800, 1000, 1200, 1400, 1600, 2000] as const;
 const onVercel = import.meta.env.PROD && typeof process !== 'undefined' && !!process.env.VERCEL;
 
 /** An optimised URL for any image (bundled path or Supabase URL) at about `width` px. */
