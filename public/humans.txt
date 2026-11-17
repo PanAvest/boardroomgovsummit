@@ -1,0 +1,12 @@
+/* TEAM */
+Website design and development: Kennedy (Wusunanwa) Abubakar
+Site: https://kennedyabubakar.com
+Location: Accra, Ghana
+
+/* CLIENT */
+Boardroom Governance Summit
+Site: https://boardroomgovsummit.com
+
+/* SITE */
+Launched: November 2026
+Built with: Astro, Supabase, Vercel

@@ -41,6 +41,21 @@ const orgSchema = {
     'https://www.instagram.com/boardroomgsummit/',
   ],
 };
+// Credit for the site build: machine-readable only, nothing is shown on the page.
+const siteSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: site.name,
+  url: site.url,
+  publisher: { '@type': 'Organization', name: site.name, url: site.url },
+  creator: {
+    '@type': 'Person',
+    name: 'Kennedy (Wusunanwa) Abubakar',
+    alternateName: 'Kennedy Abubakar',
+    url: 'https://kennedyabubakar.com',
+    jobTitle: 'Full-stack developer',
+  },
+};
 ---
 
 <!doctype html>
@@ -71,6 +86,11 @@ const orgSchema = {
     <meta name="twitter:site" content="@boardroomsummit" />
 
     <script type="application/ld+json" set:html={JSON.stringify(orgSchema)} />
+    <script type="application/ld+json" set:html={JSON.stringify(siteSchema)} />
+    <meta name="designer" content="Kennedy (Wusunanwa) Abubakar" />
+    <meta name="web_author" content="Kennedy (Wusunanwa) Abubakar, https://kennedyabubakar.com" />
+    <link rel="author" type="text/plain" href="/humans.txt" />
+    <Fragment set:html={"<!-- Website designed and built by Kennedy (Wusunanwa) Abubakar · https://kennedyabubakar.com -->"} />
     <slot name="head" />
     <script is:inline>
       document.documentElement.classList.add('js');
