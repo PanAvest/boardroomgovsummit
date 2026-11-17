@@ -273,6 +273,31 @@ const takeaways = [
           <Image src={r3} alt="Delegates in the hall at BGS 2026" widths={[400, 700]} sizes="(min-width: 900px) 25vw, 95vw" />
         </div>
       </div>
+
+      <div class="sessions">
+        <div class="sessions__head">
+          <p class="eyebrow eyebrow--gold">Watch BGS 2026</p>
+          <h3>The full summit, session by session.</h3>
+        </div>
+        <div class="sessions__grid">
+          <figure data-reveal>
+            <VideoEmbed id="754sumgrPpo" title="BGS 2026: Opening session" poster={r2} />
+            <figcaption>
+              <span class="mono">Morning</span>
+              <strong>Opening session</strong>
+              <span>Welcome, the Chairman's rallying call and the first two panels.</span>
+            </figcaption>
+          </figure>
+          <figure data-reveal>
+            <VideoEmbed id="4FOVdT1Xd7o" title="BGS 2026: Afternoon session" poster={r1} />
+            <figcaption>
+              <span class="mono">Afternoon</span>
+              <strong>Afternoon session</strong>
+              <span>The Finance and Audit Committee panel and the delegates' open forum.</span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -856,6 +881,52 @@ const takeaways = [
     margin-top: 1rem;
     font-size: 0.75rem;
     color: rgba(255, 255, 255, 0.5);
+  }
+  .sessions {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--line-dark);
+  }
+  .sessions__head {
+    display: grid;
+    gap: 0.9rem;
+    margin-bottom: 2rem;
+  }
+  .sessions__head h3 {
+    font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.2rem);
+  }
+  .sessions__grid {
+    display: grid;
+    gap: 2rem 1.5rem;
+  }
+  @media (min-width: 900px) {
+    .sessions__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .sessions figure {
+    margin: 0;
+    display: grid;
+    gap: 1rem;
+  }
+  .sessions figcaption {
+    display: grid;
+    gap: 0.25rem;
+  }
+  .sessions figcaption .mono {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+  .sessions figcaption strong {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    color: var(--white);
+  }
+  .sessions figcaption span:last-child {
+    color: rgba(255, 255, 255, 0.72);
+    font-size: 0.95rem;
   }
   .review__photos {
     display: grid;
