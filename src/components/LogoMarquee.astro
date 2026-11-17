@@ -12,7 +12,10 @@ const items = [...partners];
 
 <section class="marquee-wrap" aria-label={label}>
   <div class="container">
-    <p class="marquee-label">{label}</p>
+    <p class="marquee-label">
+      {label}
+      <a href="/partners/">View all {items.length} →</a>
+    </p>
   </div>
   <div class="marquee">
     <ul class="marquee__track">
@@ -32,6 +35,15 @@ const items = [...partners];
     padding-block: 2.75rem 3.25rem;
     background: var(--paper);
     border-block: 1px solid var(--line);
+  }
+  .marquee-label a {
+    margin-left: 0.6rem;
+    color: var(--navy-800);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .marquee-label a:hover {
+    color: var(--red);
   }
   .marquee-label {
     text-align: center;
