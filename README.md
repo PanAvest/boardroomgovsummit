@@ -73,7 +73,7 @@ Every address the WordPress site used still works:
 | 2026 partner and media logos | `src/data/partners2026.json`, `src/assets/images/partners/2026/` |
 | Articles (fallback copy) | `src/content/news/` |
 | News data layer (Supabase + fallback) | `src/lib/cms.ts` |
-| 2026 gallery (497 photos, pre-sized) | `public/gallery/2026/{thumb,full}/`, list in `src/data/gallery-2026.json` |
+| 2026 gallery (496 photos, pre-sized) | `public/gallery/2026/{thumb,full}/`, list in `src/data/gallery-2026.json` |
 | 2024 and 2025 galleries | `src/assets/images/events/2024`, `…/2025` (optimised at build) |
 | Brochures | `public/files/` (2026), and the originals under `public/wp-content/uploads/` |
 | Old WordPress uploads | `public/wp-content/uploads/` (do not rename; newsletters link here) |

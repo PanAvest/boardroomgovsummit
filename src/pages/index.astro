@@ -32,7 +32,9 @@ const faces = [chairman, ...guestsOfHonour.slice(0, 7)].map((p, i) => ({
   badge: i === 0 ? 'Chairman of the Summit' : undefined,
   tone: (['red', 'navy', 'ink', 'gold'] as const)[i % 4],
 }));
-const slides = [150, 175, 125, 350, 430, 100].map((i) => `/gallery/2026/full/${heroShots[i].name}.webp`);
+const slides = ['img-0460', 'img-112', 'img-0423', 'img-82', 'img-162', 'img-0392']
+  .filter((name) => heroShots.some((p) => p.name === name))
+  .map((name) => `/gallery/2026/full/${name}.webp`);
 const faqs = faqGroups.flatMap((g) => g.items).slice(0, 4);
 
 const takeaways = [

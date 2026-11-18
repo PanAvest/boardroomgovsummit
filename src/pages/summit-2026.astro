@@ -24,7 +24,9 @@ const leads = [
   { ...afternoonChair, badge: 'Afternoon Session Chair', tone: 'gold' as const },
 ];
 const photos = items2026();
-const pick = [1, 16, 33, 60, 95, 130, 175, 220, 280].map((i) => photos[i]).filter(Boolean);
+const pick = ['img-0249', 'img-0272', 'img-0297', 'img-0340', 'img-0386', 'img-0430', 'img-0460', 'img-0643', 'img-11']
+  .map((name) => photos.find((ph) => ph.full.endsWith(`/${name}.webp`)))
+  .filter((ph) => ph !== undefined);
 const brochurePages = Object.entries(
   import.meta.glob<{ default: ImageMetadata }>('../assets/images/brochure-2026/*.jpg', { eager: true }),
 )
