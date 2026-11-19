@@ -15,8 +15,10 @@ interface Props {
   brochure?: { href: string; label: string };
   /** How many photos to show before "Show more". */
   batch?: number;
+  /** JSON-LD for the page head. */
+  schema?: object;
 }
-const { year, title, lead, items, brochure, batch = 48 } = Astro.props;
+const { year, title, lead, items, brochure, batch = 48, schema } = Astro.props;
 const editions = [
   { year: '2026', href: '/2026-gallery/' },
   { year: '2025', href: '/2025-gallery/' },
@@ -28,6 +30,7 @@ const supabase = cmsConfigured
 ---
 
 <BaseLayout title={`BGS ${year} Gallery`} description={lead}>
+  {schema && <script slot="head" type="application/ld+json" set:html={JSON.stringify(schema)} />}
   <PageHero compact eyebrow={`${year} in focus`} title={title} lead={lead} crumbs={[{ label: 'Gallery', href: '/main-gallery/' }, { label: year }]}>
     <div class="btn-row">
       {

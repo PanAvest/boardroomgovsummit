@@ -1,0 +1,20 @@
+{
+  "kennedy": {
+    "id": "https://kennedyabubakar.com/#person",
+    "name": "Kennedy (Wusunanwa) Abubakar",
+    "alternateName": ["Kennedy Abubakar", "Kennedy Wusunanwa", "Kennedy Wusunanwa Abubakar"],
+    "url": "https://kennedyabubakar.com/",
+    "sameAs": [
+      "https://www.linkedin.com/in/kennedy-abubakar-919834189",
+      "https://www.instagram.com/kennedy_abubakar/",
+      "https://www.facebook.com/p/Kennedyabubakar-61560112862267/"
+    ]
+  },
+  "jerry": {
+    "id": "https://boardroomgovsummit.com/2026-gallery/#jerry-ofori",
+    "name": "Jerry Ofori",
+    "alternateName": [],
+    "url": "https://www.linkedin.com/in/jerry-ofori-b362a435/",
+    "sameAs": ["https://www.linkedin.com/in/jerry-ofori-b362a435/"]
+  }
+}

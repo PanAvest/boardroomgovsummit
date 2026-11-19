@@ -73,7 +73,8 @@ Every address the WordPress site used still works:
 | 2026 partner and media logos | `src/data/partners2026.json`, `src/assets/images/partners/2026/` |
 | Articles (fallback copy) | `src/content/news/` |
 | News data layer (Supabase + fallback) | `src/lib/cms.ts` |
-| 2026 gallery (496 photos, pre-sized) | `public/gallery/2026/{thumb,full}/`, list in `src/data/gallery-2026.json` |
+| 2026 gallery (498 photos, pre-sized) | `public/gallery/2026/{thumb,full}/`, list in `src/data/gallery-2026.json` |
+| People named in 2026 photos (alt text, JSON-LD, file metadata) | `src/data/gallery-2026-tags.json`, `src/data/people.json`, `src/lib/people.ts` |
 | 2024 and 2025 galleries | `src/assets/images/events/2024`, `…/2025` (optimised at build) |
 | Brochures | `public/files/` (2026), and the originals under `public/wp-content/uploads/` |
 | Old WordPress uploads | `public/wp-content/uploads/` (do not rename; newsletters link here) |
@@ -82,6 +83,7 @@ Every address the WordPress site used still works:
 
 - **Publish an article:** open Dashboard ▸ Website ▸ Articles. It appears on the site within a minute. Contributors can save drafts; managers publish.
 - **Add photos to a gallery:** open Dashboard ▸ Website ▸ Gallery, then choose the year and upload. They appear at the end of that year's gallery.
+- **Name someone in a 2026 photo:** add the photo to `src/data/gallery-2026-tags.json` (and the person to `src/data/people.json`), then run `node scripts/tag-gallery-photos.mjs` to write the names into the image files. Nothing is shown on the page; the name goes into the alt text and the page's structured data.
 - **Announce BGS 2027:** update `nextEdition` in `src/data/site.ts` and add a 2027 entry to `editions`. Then update the text in `src/components/AnnouncementBar.astro` and change its `KEY` there, so the bar reappears for people who dismissed it.
 - **Forms:** these open the visitor's email app by default. Paste a Formspree, Web3Forms or Basin endpoint into `formEndpoint` in `src/data/config.ts` to collect submissions directly.
 

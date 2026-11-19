@@ -2,6 +2,7 @@ import { getImage } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import type { GalleryItem } from '../components/EditionGallery.astro';
 import manifest2026 from '../data/gallery-2026.json';
+import { alt2026 } from './people';
 
 const events = import.meta.glob<{ default: ImageMetadata }>('../assets/images/events/*/*.{jpg,jpeg,png}', { eager: true });
 const num = (p: string) => Number(p.match(/-(\d+)(?:-of|\.)/)?.[1] ?? 0);
@@ -24,13 +25,13 @@ export async function editionItems(year: '2024' | '2025'): Promise<GalleryItem[]
   );
 }
 
-/** 2026 photos were pre-sized into public/gallery/2026 (497 files; too many to process on every build). */
+/** 2026 photos were pre-sized into public/gallery/2026 (498 photos; too many to process on every build). */
 export function items2026(): GalleryItem[] {
   return manifest2026.map((p, i) => ({
     thumb: `/gallery/2026/thumb/${p.name}.webp`,
     full: `/gallery/2026/full/${p.name}.webp`,
     w: p.tw,
     h: p.th,
-    alt: `BGS 2026 photo ${i + 1}`,
+    alt: alt2026[p.name] ?? `BGS 2026 photo ${i + 1}`,
   }));
 }

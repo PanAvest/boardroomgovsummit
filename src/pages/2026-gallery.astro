@@ -1,6 +1,7 @@
 ---
 import EditionGallery from '../components/EditionGallery.astro';
 import { items2026 } from '../lib/gallery';
+import { gallery2026Schema } from '../lib/people';
 ---
 
 <EditionGallery
@@ -9,4 +10,5 @@ import { items2026 } from '../lib/gallery';
   lead="Thursday 12 November 2026 at the Labadi Beach Hotel, Accra. The arrivals, the stage, the panels, the exhibition and the people who made the day."
   items={items2026()}
   brochure={{ href: '/files/bgs-2026-brochure.pdf', label: 'Download the 2026 brochure' }}
+  schema={gallery2026Schema()}
 />

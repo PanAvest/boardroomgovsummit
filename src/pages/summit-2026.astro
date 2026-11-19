@@ -10,6 +10,7 @@ import CtaBand from '../components/CtaBand.astro';
 import { partners2026, mediaPartners2026, contact, nextEdition } from '../data/site';
 import { chairman, convener, afternoonChair, guestsOfHonour, panels, programme2026, ampm } from '../data/bgs2026';
 import { items2026 } from '../lib/gallery';
+import { event2026Schema } from '../lib/people';
 
 import heroImg from '../assets/images/events/2026/bgs-2026-group-photo.jpg';
 import wordmark from '../assets/images/brand/bgs-2026-wordmark.png';
@@ -48,6 +49,7 @@ const reflections = [
   title="BGS 2026: Board Committees, From Oversight to Impact"
   description="A recap of the Boardroom Governance Summit 2026, held on 12 November 2026 at the Labadi Beach Hotel, Accra, under the theme 'Board Committees: From Oversight to Impact'."
 >
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify({ '@context': 'https://schema.org', ...event2026Schema })} />
   <!-- HERO -->
   <section class="s-hero">
     <span class="s-shape s-shape--1" aria-hidden="true"></span>

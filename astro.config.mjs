@@ -2,6 +2,10 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 import vercel from '@astrojs/vercel';
+import { readFileSync } from 'node:fs';
+
+/** BGS 2026 photos, listed as images of /2026-gallery/ in the sitemap (most sit behind "Show more"). */
+const gallery2026 = JSON.parse(readFileSync(new URL('./src/data/gallery-2026.json', import.meta.url), 'utf8'));
 
 /**
  * Every address the old WordPress site used still answers.
@@ -67,6 +71,13 @@ export default defineConfig({
       // Rendered on demand, so not discovered at build time.
       customPages: ['https://boardroomgovsummit.com/certificates/'],
       filter: (page) => !Object.keys(legacy).some((p) => page.endsWith(p + '/')),
+      serialize: (item) =>
+        item.url === 'https://boardroomgovsummit.com/2026-gallery/'
+          ? /** @type {import('@astrojs/sitemap').SitemapItem} */ ({
+              ...item,
+              img: gallery2026.map((/** @type {{ name: string }} */ p) => ({ url: `https://boardroomgovsummit.com/gallery/2026/full/${p.name}.webp` })),
+            })
+          : item,
     }),
   ],
   redirects: legacy,
