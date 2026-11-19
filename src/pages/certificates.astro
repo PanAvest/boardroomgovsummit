@@ -1,0 +1,510 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { contact } from '../data/site';
+import { lookupCertificate, type CertificateLookup } from '../lib/certificates';
+
+// Rendered on demand: a lookup reads the certificate from the BGS Dashboard as it is today.
+export const prerender = false;
+
+const query = (Astro.url.searchParams.get('code') ?? '').trim().slice(0, 40);
+const result: CertificateLookup | null = query ? await lookupCertificate(query) : null;
+
+if (query) {
+  // A result names a person: never cache it in shared caches, never index it.
+  Astro.response.headers.set('Cache-Control', 'private, no-store');
+  Astro.response.headers.set('X-Robots-Tag', 'noindex');
+} else {
+  Astro.response.headers.set('Cache-Control', 'public, max-age=0, s-maxage=3600, stale-while-revalidate=86400');
+}
+
+const valid = result?.status === 'valid' ? result : null;
+const shareUrl = valid ? new URL(`/certificates/?code=${valid.code}`, Astro.site).href : null;
+const data = valid ? JSON.stringify({ certificate: valid.certificate, event: valid.event }).replace(/</g, '\\u003c') : null;
+const mailto = (subject: string) => `mailto:${contact.email}?subject=${encodeURIComponent(subject)}`;
+---
+
+<BaseLayout
+  title="Certificate verification"
+  description="Verify a Boardroom Governance Summit certificate of attendance, or download your own certificate again, with the certificate number."
+  noindex={!!query}
+>
+  <PageHero
+    compact
+    eyebrow="Certificates"
+    title="Verify a certificate"
+    lead="Check that a Boardroom Governance Summit certificate of attendance is genuine, or download your own certificate again."
+    crumbs={[{ label: 'Certificate verification' }]}
+  />
+
+  <section class="section cert-section">
+    <div class="container cert">
+      <form class="card cert__form" method="get" action="/certificates/" role="search" aria-label="Verify a certificate">
+        <div class="field">
+          <label for="cert-code">Certificate number</label>
+          <div class="cert__row">
+            <input
+              id="cert-code"
+              class="input cert__input"
+              name="code"
+              value={valid?.code ?? query}
+              placeholder="BGS-K7QM-4XWP"
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              maxlength="40"
+              required
+              aria-describedby="cert-code-hint"
+            />
+            <button class="btn btn--navy" type="submit">Verify</button>
+          </div>
+          <p id="cert-code-hint" class="cert__hint">
+            Printed at the bottom of the certificate, after “Certificate no.”. It is the same as the number on your
+            BGS&nbsp;2026 e-ticket.
+          </p>
+        </div>
+      </form>
+
+      {
+        valid && (
+          <div class="cert__result" id="result">
+            <article class="verdict verdict--good" aria-labelledby="verdict-title">
+              <p class="verdict__badge">
+                <Icon name="check" size={16} /> Verified
+              </p>
+              <h2 id="verdict-title">This certificate is genuine.</h2>
+              <p class="verdict__text">
+                The Boardroom Governance Summit issued certificate {valid.code} to the person named below, for
+                attending the {valid.event.title}.
+              </p>
+              <dl class="facts">
+                <div>
+                  <dt>Awarded to</dt>
+                  <dd class="facts__name">{valid.certificate.name}</dd>
+                </div>
+                <div>
+                  <dt>Certificate no.</dt>
+                  <dd class="mono">{valid.code}</dd>
+                </div>
+                <div>
+                  <dt>Event</dt>
+                  <dd>{valid.event.title}</dd>
+                </div>
+                <div>
+                  <dt>Date</dt>
+                  <dd>{valid.event.dateLine}</dd>
+                </div>
+                <div>
+                  <dt>Venue</dt>
+                  <dd>{valid.event.venueLine}</dd>
+                </div>
+                {valid.certificate.institution && (
+                  <div>
+                    <dt>Institution</dt>
+                    <dd>{valid.certificate.institution.name}</dd>
+                  </div>
+                )}
+              </dl>
+              <div class="share">
+                <label for="share-link">Link to this verification</label>
+                <div class="share__row">
+                  <input id="share-link" class="input share__input" value={shareUrl} readonly />
+                  <button type="button" class="btn btn--ghost btn--sm" data-copy="share-link">
+                    <Icon name="link" size={16} /> Copy link
+                  </button>
+                </div>
+              </div>
+            </article>
+
+            <div class="preview">
+              <div class="preview__frame">
+                <canvas id="cert-canvas" width="3508" height="2480" role="img" aria-label={`Certificate of attendance for ${valid.certificate.name}`} />
+                <p class="preview__status" role="status">Preparing the certificate…</p>
+              </div>
+              <div class="btn-row preview__actions">
+                <button type="button" class="btn" data-download="pdf" disabled>
+                  <Icon name="download" size={18} /> Download PDF
+                </button>
+                <button type="button" class="btn btn--ghost" data-download="png" disabled>
+                  <Icon name="download" size={18} /> Download image (PNG)
+                </button>
+              </div>
+              <p class="preview__note">
+                Is the name spelt wrongly? <a href={mailto(`Certificate ${valid.code}: name correction`)}>Email us the correct spelling</a> and we will correct your certificate.
+              </p>
+              <noscript>
+                <p class="preview__note">Turn on JavaScript to see and download the certificate.</p>
+              </noscript>
+            </div>
+            <script is:inline type="application/json" id="cert-data" set:html={data} />
+          </div>
+        )
+      }
+
+      {
+        result && !valid && (
+          <article class="verdict verdict--bad" id="result" aria-labelledby="verdict-title">
+            <p class="verdict__badge">
+              <Icon name="alert" size={16} /> {result.status === 'error' ? 'Not checked' : 'Not verified'}
+            </p>
+            {result.status === 'invalid' && (
+              <>
+                <h2 id="verdict-title">That is not a certificate number.</h2>
+                <p class="verdict__text">
+                  Certificate numbers read like <span class="mono">BGS-K7QM-4XWP</span>: BGS, then eight letters and
+                  digits. They never contain the letters I, L or O, or the digits 0 or 1.
+                </p>
+              </>
+            )}
+            {result.status === 'not_found' && (
+              <>
+                <h2 id="verdict-title">No certificate matches {result.code}.</h2>
+                <p class="verdict__text">
+                  Check the number against the certificate and try again. Numbers never contain the letters I, L or O,
+                  or the digits 0 or 1. If you attended BGS 2026 and believe this is a mistake,{' '}
+                  <a href={mailto(`Certificate ${result.code}`)}>email us</a> with the number and the name on the
+                  certificate.
+                </p>
+              </>
+            )}
+            {result.status === 'withdrawn' && (
+              <>
+                <h2 id="verdict-title">Certificate {result.code} is no longer valid.</h2>
+                <p class="verdict__text">
+                  The ticket it was issued for has been cancelled. If you believe this is a mistake,{' '}
+                  <a href={mailto(`Certificate ${result.code}`)}>email us</a> with the number and the name on the
+                  certificate.
+                </p>
+              </>
+            )}
+            {result.status === 'error' && (
+              <>
+                <h2 id="verdict-title">We couldn't check this certificate just now.</h2>
+                <p class="verdict__text">
+                  Please try again in a few minutes. If it keeps happening,{' '}
+                  <a href={mailto(`Certificate ${result.code ?? ''}`.trim())}>email us</a> and we will confirm it for you.
+                </p>
+              </>
+            )}
+          </article>
+        )
+      }
+
+      <div class="help">
+        <div>
+          <h2>Verifying for an employer or institute?</h2>
+          <p>
+            Enter the number from the bottom of the certificate. A genuine certificate shows the holder's name, the
+            event and the date exactly as printed. Anyone can check, at no cost.
+          </p>
+        </div>
+        <div>
+          <h2>Need your certificate again?</h2>
+          <p>
+            Enter your certificate number to see your certificate and download it as a PDF or an image. The number is
+            the same as the one on your BGS&nbsp;2026 e-ticket.
+          </p>
+        </div>
+        <div>
+          <h2>Can't find your number?</h2>
+          <p>
+            Email <a href={mailto('My BGS 2026 certificate')}>{contact.email}</a> with your full name and the email
+            address you registered with, and we will send your certificate again.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import {
+    certificateFileName,
+    certificatePdf,
+    certificatePng,
+    paintCertificate,
+    saveBlob,
+    type CertificateEvent,
+    type CertificateFace,
+  } from '../lib/certificate-art';
+
+  // Copy the verification link.
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((button) => {
+    const input = document.getElementById(button.dataset.copy!) as HTMLInputElement | null;
+    input?.addEventListener('focus', () => input.select());
+    button.addEventListener('click', async () => {
+      if (!input) return;
+      const label = button.innerHTML;
+      try {
+        await navigator.clipboard.writeText(input.value);
+        button.textContent = 'Copied';
+      } catch {
+        input.select();
+        button.textContent = 'Select the link and copy it';
+      }
+      setTimeout(() => (button.innerHTML = label), 2000);
+    });
+  });
+
+  // Draw the certificate, then offer it as a PDF or a PNG.
+  const source = document.getElementById('cert-data');
+  if (source?.textContent) {
+    const { certificate, event } = JSON.parse(source.textContent) as { certificate: CertificateFace; event: CertificateEvent };
+    const canvas = document.getElementById('cert-canvas') as HTMLCanvasElement;
+    const status = document.querySelector<HTMLElement>('.preview__status')!;
+    const buttons = document.querySelectorAll<HTMLButtonElement>('[data-download]');
+    const failed = "The certificate couldn't be drawn. Check your connection and reload the page.";
+
+    paintCertificate(canvas, certificate, event).then(
+      () => {
+        canvas.classList.add('is-ready');
+        status.hidden = true;
+        buttons.forEach((b) => (b.disabled = false));
+      },
+      (error) => {
+        console.error('[certificate]', error);
+        status.textContent = failed;
+        status.dataset.state = 'error';
+      },
+    );
+
+    buttons.forEach((button) =>
+      button.addEventListener('click', async () => {
+        const format = button.dataset.download as 'pdf' | 'png';
+        const label = button.innerHTML;
+        buttons.forEach((b) => (b.disabled = true));
+        button.textContent = 'Preparing…';
+        try {
+          const blob = format === 'pdf' ? await certificatePdf(certificate, event) : await certificatePng(certificate, event);
+          saveBlob(blob, `${certificateFileName(certificate)}.${format}`);
+        } catch (error) {
+          console.error('[certificate]', error);
+          status.hidden = false;
+          status.textContent = failed;
+          status.dataset.state = 'error';
+        } finally {
+          button.innerHTML = label;
+          buttons.forEach((b) => (b.disabled = false));
+        }
+      }),
+    );
+  }
+
+  // After a lookup, bring the answer into view (the form stays above it for the next number).
+  if (new URLSearchParams(location.search).has('code')) {
+    document.getElementById('result')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+  }
+</script>
+
+<style>
+  .cert-section {
+    padding-top: clamp(2.5rem, 2rem + 2vw, 4rem);
+  }
+  .cert {
+    display: grid;
+    gap: clamp(1.75rem, 1.4rem + 1.4vw, 2.75rem);
+    max-width: 980px;
+  }
+  .cert__form {
+    padding: clamp(1.25rem, 1rem + 1vw, 2rem);
+  }
+  .cert__row,
+  .share__row {
+    display: flex;
+    gap: 0.6rem;
+  }
+  .cert__input {
+    flex: 1;
+    min-width: 0;
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .cert__input::placeholder {
+    text-transform: none;
+    letter-spacing: 0.06em;
+  }
+  .cert__hint {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  @media (max-width: 520px) {
+    .cert__row,
+    .share__row {
+      flex-direction: column;
+    }
+  }
+
+  .cert__result {
+    display: grid;
+    gap: 1.5rem;
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+  .verdict {
+    border: 1px solid var(--line);
+    border-left-width: 5px;
+    border-radius: var(--radius);
+    background: var(--white);
+    padding: clamp(1.5rem, 1.2rem + 1vw, 2.25rem);
+    scroll-margin-top: calc(var(--header-h) + 1.5rem);
+  }
+  .verdict--good {
+    border-left-color: var(--kente-green);
+  }
+  .verdict--bad {
+    border-left-color: var(--red);
+  }
+  .verdict__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .verdict--good .verdict__badge {
+    background: rgba(11, 122, 62, 0.1);
+    color: var(--kente-green);
+  }
+  .verdict--bad .verdict__badge {
+    background: rgba(216, 34, 33, 0.09);
+    color: var(--red-dark);
+  }
+  .verdict h2 {
+    margin-top: 0.9rem;
+    font-size: var(--fs-h4);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    overflow-wrap: anywhere;
+  }
+  .verdict__text {
+    margin-top: 0.6rem;
+    max-width: 62ch;
+    color: var(--ink-2);
+  }
+  .verdict a,
+  .preview__note a,
+  .help a {
+    color: var(--navy-800);
+    font-weight: 600;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+    gap: 1rem 2rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .facts dt {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .facts dd {
+    margin: 0.2rem 0 0;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .facts__name {
+    font-size: 1.15rem;
+  }
+  .mono {
+    font-family: var(--font-mono);
+    letter-spacing: 0.04em;
+  }
+
+  .share {
+    display: grid;
+    gap: 0.45rem;
+    margin-top: 1.5rem;
+  }
+  .share label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-2);
+  }
+  .share__input {
+    flex: 1;
+    min-width: 0;
+    min-height: 44px;
+    padding-block: 0.55rem;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+
+  .preview {
+    display: grid;
+    gap: 1rem;
+  }
+  .preview__frame {
+    position: relative;
+    aspect-ratio: 3508 / 2480;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    background: var(--paper);
+    box-shadow: var(--shadow);
+  }
+  .preview__frame canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    opacity: 0;
+    transition: opacity 0.25s var(--ease);
+  }
+  .preview__frame canvas.is-ready {
+    opacity: 1;
+  }
+  .preview__status {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
+    text-align: center;
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .preview__status[data-state='error'] {
+    color: var(--red-dark);
+  }
+  .preview__status[hidden] {
+    display: none;
+  }
+  .preview__actions .btn[disabled] {
+    opacity: 0.55;
+    cursor: progress;
+  }
+  .preview__note {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+
+  .help {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem 2rem;
+    padding-top: clamp(1.75rem, 1.4rem + 1.4vw, 2.75rem);
+    border-top: 1px solid var(--line);
+  }
+  .help h2 {
+    font-size: 1.05rem;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+  .help p {
+    margin-top: 0.45rem;
+    font-size: 0.94rem;
+    color: var(--ink-2);
+  }
+</style>

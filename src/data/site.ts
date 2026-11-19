@@ -70,6 +70,7 @@ export const footerNav = [
     links: [
       { label: 'About the Summit', href: '/about/' },
       { label: 'BGS 2026 recap', href: '/summit-2026/' },
+      { label: 'Certificates', href: '/certificates/' },
       { label: 'Programme', href: '/agenda/' },
       { label: 'Past Speakers', href: '/past-speakers/' },
       { label: 'Register interest', href: '/registration/' },

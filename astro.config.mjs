@@ -41,6 +41,10 @@ const legacy = {
   // Short addresses
   '/faqs': '/frequently-asked-questions-faqs/',
   '/summit-2027': '/registration/',
+  '/certificate': '/certificates/',
+  '/verify': '/certificates/',
+  '/verify-certificate': '/certificates/',
+  '/certificate-verification': '/certificates/',
 };
 
 export default defineConfig({
@@ -60,6 +64,8 @@ export default defineConfig({
   }),
   integrations: [
     sitemap({
+      // Rendered on demand, so not discovered at build time.
+      customPages: ['https://boardroomgovsummit.com/certificates/'],
       filter: (page) => !Object.keys(legacy).some((p) => page.endsWith(p + '/')),
     }),
   ],
